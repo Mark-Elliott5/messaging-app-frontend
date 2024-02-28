@@ -1,33 +1,26 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
-
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
+      <div id='conversations-and-profile' className='left-sidebar'>
+        <div id='conversations'></div>
+        <div id='profile'></div>
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div id='middle-column'>
+        <div id='messages'></div>
+        <div id='message-input'>
+          <input
+            type='text'
+            name='content'
+            id='messsage-content'
+            placeholder='Type here...'
+          />
+          <button id='send-message'></button>
+        </div>
       </div>
-      <p className='read-the-docs'>
-        Click on the Vite and React logos to learn more
-      </p>
+      <div id='users' className='right-sidebar'>
+        <div id='online'></div>
+        <div id='offline'></div>
+      </div>
     </>
   );
 }
