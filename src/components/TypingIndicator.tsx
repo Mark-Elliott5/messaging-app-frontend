@@ -39,10 +39,10 @@ function TypingIndicator() {
 
   return (
     usersTyping && (
-      <>
+      <div>
         <span>{usersTyping}</span>
         <AnimatedEllipses />
-      </>
+      </div>
     )
   );
 }
