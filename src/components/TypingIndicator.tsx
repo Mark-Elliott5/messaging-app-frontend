@@ -3,24 +3,27 @@ import useWebsocket from 'react-use-websocket';
 
 function TypingIndicator() {
   // const [state, setState] = useState<string[] | null>(null);
-  const { lastMessage, readyState } = useWebsocket('', {
-    share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('Typing indicator websocket opened'),
-    onClose: (e) =>
-      console.log('Typing indicator websocket closed: ' + e.reason),
-    onMessage: () => console.log('Typing indicator websocket message'),
-    onError: () => console.log('Typing indicator websocket error'),
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is "Normal Closure"
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?
-  });
+  const { lastMessage, readyState } = useWebsocket(
+    'wss://echo.websocket.events',
+    {
+      share: true, // Shares ws connection to same URL between components
+      onOpen: () => console.log('Typing indicator websocket opened'),
+      onClose: (e) =>
+        console.log('Typing indicator websocket closed: ' + e.reason),
+      onMessage: () => console.log('Typing indicator websocket message'),
+      onError: () => console.log('Typing indicator websocket error'),
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is "Normal Closure"
+        if (e.code !== 1000) {
+          return true;
+        }
+        return false;
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?
+    }
+  );
 
   const usersTyping = (() => {
     // check that connection is open and typing property exists
@@ -38,12 +41,14 @@ function TypingIndicator() {
   })();
 
   return (
-    usersTyping && (
-      <div>
-        <span>{usersTyping}</span>
-        <AnimatedEllipses />
-      </div>
-    )
+    <div className='h-4 border-t-1 border-gray-500 px-2'>
+      {usersTyping && (
+        <>
+          <span className='text-x'>{usersTyping}</span>
+          <AnimatedEllipses />
+        </>
+      )}
+    </div>
   );
 }
 

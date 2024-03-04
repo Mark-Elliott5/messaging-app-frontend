@@ -4,16 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { getMessages } from '../fetch/fetchFunctions';
 
 function MessageList() {
+  // needs conversation id inherited from state to supply to first websocket hook arg
   const [loading, setLoading] = useState(true);
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
   const messageBuffer = useRef<IMessage[]>([]);
 
-  useWebsocket('', {
+  useWebsocket('wss://echo.websocket.events', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => console.log('MessageList websocket opened'),
     onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
     onMessage: (e) => {
-      console.log('MessageList message recieved');
+      console.log('MessageList websocket message recieved');
       console.log(e);
       if (e.data.type === 'message') {
         const { message } = e.data;
@@ -45,29 +46,34 @@ function MessageList() {
   };
 
   const messages = (() => {
-    return messageHistory?.map((message) => (
-      <div>
-        <img src={`${message.sender.avatar}.jpg`}></img>
-        <div>
+    return messageHistory.length
+      ? messageHistory.map((message) => (
           <div>
-            <span className=''>{message.sender.username}</span>
-            <span className=''>{formatDate(message.date)}</span>
+            <img src={`${message.sender.avatar}.jpg`}></img>
+            <div>
+              <div>
+                <span className=''>{message.sender.username}</span>
+                <span className=''>{formatDate(message.date)}</span>
+              </div>
+              <p>{message.content}</p>
+            </div>
           </div>
-          <p>{message.content}</p>
-        </div>
-      </div>
-    ));
+        ))
+      : null;
   })();
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await getMessages('insert app state variable here');
-        const messages = response.data;
+        const { messages } = response.data;
         if (!messages) {
-          throw new Error('No characters received.');
+          setLoading(false);
+          throw new Error('No messages received.');
         }
-        console.log(`Messages loaded: ${'app state variable here'}`);
+        console.log(
+          `Messages loaded: ${'app state (conversation) variable here'}`
+        );
         const history = messages.concat(messageBuffer.current);
         setMessageHistory(history);
         setLoading(false);
@@ -80,15 +86,21 @@ function MessageList() {
   }, []);
 
   return (
-    <div id='messages'>
+    <>
       {messages?.length ? (
-        messages
+        <div id='messages' className='flex-1'>
+          {messages}
+        </div>
       ) : loading ? (
-        <p>Loading...</p>
+        <div id='messages' className='flex-1 flex items-center justify-center'>
+          <p className='text-center'>Loading...</p>
+        </div>
       ) : (
-        <p>No messages yet!</p>
+        <div id='messages' className='flex-1 flex items-center justify-center'>
+          <p className='text-center'>No messages yet!</p>
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

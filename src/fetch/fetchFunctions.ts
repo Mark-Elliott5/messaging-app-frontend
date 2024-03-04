@@ -3,7 +3,7 @@ import { IMessage } from '../types/fetchTypes';
 
 async function getMessages(conversationId: string) {
   try {
-    const response: AxiosResponse<IMessage[]> = await axios.get(
+    const response: AxiosResponse<{ messages: IMessage[] }> = await axios.get(
       `/api/getMessages/${conversationId}`
     );
     return response;

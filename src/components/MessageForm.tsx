@@ -6,23 +6,29 @@ import {
 import useWebsocket from 'react-use-websocket';
 
 function MessageForm() {
-  const { sendMessage, readyState } = useWebsocket('', {
-    share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('MiddleColumn websocket opened'),
-    onClose: (e) => console.log('MiddleColumn websocket closed: ' + e.reason),
-    onMessage: () => console.log('MiddleColumn websocket message'),
-    onError: () => console.log('MiddleColumn websocket error'),
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is "Normal Closure"
-      if (e.code !== 1000) {
+  const { sendMessage, readyState } = useWebsocket(
+    'wss://echo.websocket.events',
+    {
+      share: true, // Shares ws connection to same URL between components
+      onOpen: () => console.log('MessageForm websocket opened'),
+      onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
+      onMessage: () => console.log('MessageForm websocket message'),
+      onError: () => console.log('MessageForm websocket error'),
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is "Normal Closure"
+        if (e.code !== 1000) {
+          return true;
+        }
+        return false;
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?,
+      filter: () => {
         return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?
-  });
+      },
+    }
+  );
 
   const handleTyping: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (readyState !== 1) {
@@ -53,20 +59,22 @@ function MessageForm() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSendMessage}>
-        <input
-          type='text'
-          name='content'
-          id='messsage-content'
-          placeholder='Type here...'
-          onChange={handleTyping}
-        />
-        <button id='send-message' type='submit'>
-          Send
-        </button>
-      </form>
-    </>
+    <form
+      onSubmit={handleSendMessage}
+      className='flex items-center justify-center px-2'
+    >
+      <input
+        type='text'
+        name='content'
+        id='messsage-content'
+        placeholder='Type here...'
+        onChange={handleTyping}
+        className='flex-1 px-2'
+      />
+      <button id='send-message' type='submit'>
+        Send
+      </button>
+    </form>
   );
 }
 

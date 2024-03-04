@@ -4,9 +4,12 @@ import TypingIndicator from './TypingIndicator';
 
 function MiddleColumn() {
   return (
-    <div id='middle-column'>
+    <div
+      id='middle-column'
+      className='flex flex-col  border-x-1 border-gray-500'
+    >
       <MessageList />
-      <div id='message-input' className='flex flex-col p-2'>
+      <div id='message-input' className='flex flex-col'>
         <TypingIndicator />
         <MessageForm />
       </div>

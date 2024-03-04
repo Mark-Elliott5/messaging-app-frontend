@@ -7,7 +7,7 @@ function AnimatedEllipses() {
     <LazyMotion features={domAnimation}>
       <m.span
         animate={{
-          y: [0, -2, 0],
+          y: [0, -1, 0],
           transition: { duration: 0.8, delay: 0, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
@@ -16,7 +16,7 @@ function AnimatedEllipses() {
       </m.span>
       <m.span
         animate={{
-          y: [0, -2, 0],
+          y: [0, -1, 0],
           transition: { duration: 0.8, delay: 0.2, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
@@ -25,7 +25,7 @@ function AnimatedEllipses() {
       </m.span>
       <m.span
         animate={{
-          y: [0, -2, 0],
+          y: [0, -1, 0],
           transition: { duration: 0.8, delay: 0.4, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
