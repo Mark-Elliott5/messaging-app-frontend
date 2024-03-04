@@ -35,7 +35,19 @@ function MessageList() {
       return false;
     },
     reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?
+    reconnectInterval: 3000, // Milliseconds?,
+    filter: (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'message') {
+          return true;
+        }
+        return false;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    },
   });
 
   const formatDate = (date: Date) => {
@@ -88,15 +100,21 @@ function MessageList() {
   return (
     <>
       {messages?.length ? (
-        <div id='messages' className='flex-1'>
+        <div id='messages' className='flex-1 border-b-1 border-gray-500'>
           {messages}
         </div>
       ) : loading ? (
-        <div id='messages' className='flex-1 flex items-center justify-center'>
+        <div
+          id='messages'
+          className='flex-1 flex items-center justify-center border-b-1 border-gray-500'
+        >
           <p className='text-center'>Loading...</p>
         </div>
       ) : (
-        <div id='messages' className='flex-1 flex items-center justify-center'>
+        <div
+          id='messages'
+          className='flex-1 flex items-center justify-center border-b-1 border-gray-500'
+        >
           <p className='text-center'>No messages yet!</p>
         </div>
       )}

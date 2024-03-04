@@ -22,6 +22,18 @@ function TypingIndicator() {
       },
       reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
       reconnectInterval: 3000, // Milliseconds?
+      filter: (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.type === 'typing') {
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      },
     }
   );
 
@@ -41,7 +53,7 @@ function TypingIndicator() {
   })();
 
   return (
-    <div className='h-4 border-t-1 border-gray-500 px-2'>
+    <div className='h-4 px-2'>
       {usersTyping && (
         <>
           <span className='text-x'>{usersTyping}</span>

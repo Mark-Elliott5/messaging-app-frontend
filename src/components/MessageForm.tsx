@@ -25,7 +25,7 @@ function MessageForm() {
       reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
       reconnectInterval: 3000, // Milliseconds?,
       filter: () => {
-        return true;
+        return false;
       },
     }
   );
