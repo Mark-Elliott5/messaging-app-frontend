@@ -1,5 +1,6 @@
 import AnimatedEllipses from './AnimatedEllipses';
 import useWebsocket from 'react-use-websocket';
+import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
 
 function TypingIndicator() {
   // const [state, setState] = useState<string[] | null>(null);
@@ -74,12 +75,25 @@ function TypingIndicator() {
   })();
 
   return (
-    usersTyping && (
-      <div className='px-1 absolute bottom-0 left-0'>
-        <span className='text-2xs'>{'mark is typing'}</span>
-        <AnimatedEllipses />
-      </div>
-    )
+    <AnimatePresence>
+      {usersTyping && (
+        <LazyMotion features={domAnimation}>
+          <m.div
+            animate={{
+              transition: { duration: 0.2 },
+              y: 0,
+              opacity: 1,
+            }}
+            exit={{ y: 6, opacity: 0 }}
+            style={{ display: 'inline-block', y: 6, opacity: 0 }}
+            className='px-1 absolute bottom-0 left-0'
+          >
+            <span className='text-2xs'>{'mark is typing'}</span>
+            <AnimatedEllipses />
+          </m.div>
+        </LazyMotion>
+      )}
+    </AnimatePresence>
   );
 }
 
