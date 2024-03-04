@@ -25,9 +25,11 @@ function TypingIndicator() {
       filter: (e) => {
         try {
           const data = JSON.parse(e.data);
-          if (data.type === 'typing') {
+          if (data.action === 'typing') {
+            console.log('typing true');
             return true;
           }
+          console.log('typing False');
           return false;
         } catch (err) {
           console.log(err);
@@ -39,28 +41,45 @@ function TypingIndicator() {
 
   const usersTyping = (() => {
     // check that connection is open and typing property exists
-    if (readyState !== 1 || !lastMessage?.data?.typing) {
+    try {
+      if (!lastMessage) {
+        return null;
+      }
+      const data = JSON.parse(lastMessage.data);
+      const { typing, typers } = data;
+      if (readyState !== 1 || !typing) {
+        console.log('usersTyping null');
+        return null;
+      }
+      if (typing.length >= 3) {
+        console.log('usersTyping true');
+        return true;
+        // uncomment when backend written:
+        // return `${typers[0]}, ${typers[1]}, and others are typing`;
+      }
+      if (typing.length === 2) {
+        console.log('usersTyping true');
+        return true;
+        // uncomment when backend written:
+        // return `${typers[0]} and ${typers[1]} are typing`;
+      }
+      console.log('usersTyping true');
+      return true;
+      // uncomment when backend written:
+      // return `${typers[0]} is typing`;
+    } catch (err) {
+      console.log('usersTyping err: ' + err);
       return null;
     }
-    const { typing } = lastMessage.data;
-    if (typing.length >= 3) {
-      return `${typing[0]}, ${typing[1]}, and others are typing`;
-    }
-    if (typing.length === 2) {
-      return `${typing[0]} and ${typing[1]} are typing`;
-    }
-    return `${typing[0]} is typing`;
   })();
 
   return (
-    <div className='h-4 px-2'>
-      {usersTyping && (
-        <>
-          <span className='text-x'>{usersTyping}</span>
-          <AnimatedEllipses />
-        </>
-      )}
-    </div>
+    usersTyping && (
+      <div className='px-1 absolute bottom-0 left-0'>
+        <span className='text-2xs'>{'mark is typing'}</span>
+        <AnimatedEllipses />
+      </div>
+    )
   );
 }
 

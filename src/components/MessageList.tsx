@@ -2,6 +2,7 @@ import useWebsocket from 'react-use-websocket';
 import { IMessage } from '../types/fetchTypes';
 import { useEffect, useRef, useState } from 'react';
 import { getMessages } from '../fetch/fetchFunctions';
+import TypingIndicator from './TypingIndicator';
 
 function MessageList() {
   // needs conversation id inherited from state to supply to first websocket hook arg
@@ -99,25 +100,19 @@ function MessageList() {
 
   return (
     <>
-      {messages?.length ? (
-        <div id='messages' className='flex-1 border-b-1 border-gray-500'>
-          {messages}
-        </div>
-      ) : loading ? (
-        <div
-          id='messages'
-          className='flex-1 flex items-center justify-center border-b-1 border-gray-500'
-        >
+      <div
+        id='messages'
+        className='flex-1 flex flex-col relative border-b-1 border-gray-500 items-center justify-center'
+      >
+        {messages?.length ? (
+          messages
+        ) : loading ? (
           <p className='text-center'>Loading...</p>
-        </div>
-      ) : (
-        <div
-          id='messages'
-          className='flex-1 flex items-center justify-center border-b-1 border-gray-500'
-        >
+        ) : (
           <p className='text-center'>No messages yet!</p>
-        </div>
-      )}
+        )}
+        <TypingIndicator />
+      </div>
     </>
   );
 }

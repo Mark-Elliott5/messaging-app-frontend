@@ -10,7 +10,7 @@ export default {
         1: '1px',
       },
       fontSize: {
-        xxs: ['12px', '16px'],
+        '2xs': ['12px', '16px'],
       },
     },
   },
