@@ -3,10 +3,7 @@ import MessageList from './MessageList';
 
 function MiddleColumn() {
   return (
-    <div
-      id='middle-column'
-      className='flex flex-col border-x-1 border-gray-500'
-    >
+    <div id='middle-column' className='z-10 flex flex-col bg-wire-500 shadow-x'>
       <MessageList />
       <div id='message-input' className='flex flex-col'>
         <MessageForm />

@@ -15,7 +15,7 @@ function MessageList() {
     onOpen: () => console.log('MessageList websocket opened'),
     onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
     onMessage: (e) => {
-      console.log('MessageList websocket message recieved');
+      // console.log('MessageList websocket message recieved');
       console.log(e);
       if (e.data.type === 'message') {
         const { message } = e.data;
@@ -29,7 +29,7 @@ function MessageList() {
     onError: () => console.log('MessageList websocket error'),
     retryOnError: true,
     shouldReconnect: (e) => {
-      // code 1000 is "Normal Closure"
+      // code 1000 is 'Normal Closure'
       if (e.code !== 1000) {
         return true;
       }
@@ -102,7 +102,7 @@ function MessageList() {
     <>
       <div
         id='messages'
-        className='flex-1 flex flex-col relative border-b-1 border-gray-500 items-center justify-center'
+        className='relative flex flex-1 flex-col items-center justify-center'
       >
         {messages?.length ? (
           messages

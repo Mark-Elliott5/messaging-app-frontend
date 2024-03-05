@@ -11,11 +11,11 @@ function TypingIndicator() {
       onOpen: () => console.log('Typing indicator websocket opened'),
       onClose: (e) =>
         console.log('Typing indicator websocket closed: ' + e.reason),
-      onMessage: () => console.log('Typing indicator websocket message'),
+      // onMessage: () => console.log('Typing indicator websocket message'),
       onError: () => console.log('Typing indicator websocket error'),
       retryOnError: true,
       shouldReconnect: (e) => {
-        // code 1000 is "Normal Closure"
+        // code 1000 is 'Normal Closure'
         if (e.code !== 1000) {
           return true;
         }
@@ -27,10 +27,8 @@ function TypingIndicator() {
         try {
           const data = JSON.parse(e.data);
           if (data.action === 'typing') {
-            console.log('typing true');
             return true;
           }
-          console.log('typing False');
           return false;
         } catch (err) {
           console.log(err);
@@ -49,22 +47,18 @@ function TypingIndicator() {
       const data = JSON.parse(lastMessage.data);
       const { typing, typers } = data;
       if (readyState !== 1 || !typing) {
-        console.log('usersTyping null');
         return null;
       }
       if (typing.length >= 3) {
-        console.log('usersTyping true');
         return true;
         // uncomment when backend written:
         // return `${typers[0]}, ${typers[1]}, and others are typing`;
       }
       if (typing.length === 2) {
-        console.log('usersTyping true');
         return true;
         // uncomment when backend written:
         // return `${typers[0]} and ${typers[1]} are typing`;
       }
-      console.log('usersTyping true');
       return true;
       // uncomment when backend written:
       // return `${typers[0]} is typing`;
@@ -86,9 +80,9 @@ function TypingIndicator() {
             }}
             exit={{ y: 6, opacity: 0 }}
             style={{ display: 'inline-block', y: 6, opacity: 0 }}
-            className='px-1 absolute bottom-0 left-0'
+            className='absolute bottom-0 left-0 px-1'
           >
-            <span className='text-2xs'>{'mark is typing'}</span>
+            <span className='pl-2 text-2xs'>{'mark is typing'}</span>
             <AnimatedEllipses />
           </m.div>
         </LazyMotion>

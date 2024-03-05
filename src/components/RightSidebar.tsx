@@ -1,6 +1,6 @@
 function RightSidebar() {
   return (
-    <div id='users' className='right-sidebar'>
+    <div id='users' className='bg-wire-600'>
       <div id='online'></div>
       <div id='offline'></div>
     </div>
