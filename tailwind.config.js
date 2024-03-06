@@ -15,6 +15,12 @@ export default {
       boxShadow: {
         x: '0px 0px 16px 1px rgba(0,0,0,0.45)',
       },
+      width: {
+        unset: 'unset',
+      },
+      height: {
+        unset: 'unset',
+      },
       colors: {
         'ebony-clay': {
           50: '#f5f6f9',

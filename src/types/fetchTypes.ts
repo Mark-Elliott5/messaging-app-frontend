@@ -6,6 +6,7 @@ interface IMessage {
   sender: IUser;
   recipient: IUser | null;
   conversation: IConversation | null;
+  directMessage: IDirectMessage | null;
   date: Date;
   sequence: number;
 }
@@ -22,6 +23,13 @@ interface IConversation {
   messages: IMessage[];
 }
 
+interface IDirectMessage {
+  _id: Types.ObjectId;
+  message: IMessage[];
+  sender: IUser;
+  recipient: IUser;
+}
+
 // {
 //   Id: ObjectId,
 //   Content: string,
@@ -32,4 +40,4 @@ interface IConversation {
 //   Sequence: number stating from 0 to indicate order of message received,
 //   }
 
-export type { IConversation, IMessage, IUser };
+export type { IConversation, IDirectMessage, IMessage, IUser };
