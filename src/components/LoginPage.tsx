@@ -114,7 +114,7 @@ function LoginPage({
         type='button'
         onClick={() => setPage('guest')}
       >
-        Login as a Guest
+        Enter as a Guest
       </button>
     </form>
   );
@@ -179,7 +179,7 @@ function LoginPage({
         type='button'
         onClick={() => setPage('guest')}
       >
-        Login as a Guest
+        Enter as a Guest
       </button>
     </form>
   );

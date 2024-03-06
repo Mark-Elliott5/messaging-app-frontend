@@ -18,9 +18,16 @@ interface IUser {
   avatar: number;
 }
 
+interface IUserTab {
+  _id: Types.ObjectId;
+  username: string;
+  avatar: number;
+}
+
 interface IConversation {
   _id: Types.ObjectId;
   messages: IMessage[];
+  // name: string | null;
 }
 
 interface IDirectMessage {
@@ -28,6 +35,11 @@ interface IDirectMessage {
   message: IMessage[];
   sender: IUser;
   recipient: IUser;
+}
+
+interface IDirectMessageTab {
+  _id: Types.ObjectId;
+  sender: IUserTab;
 }
 
 // {
@@ -40,4 +52,10 @@ interface IDirectMessage {
 //   Sequence: number stating from 0 to indicate order of message received,
 //   }
 
-export type { IConversation, IDirectMessage, IMessage, IUser };
+export type {
+  IConversation,
+  IDirectMessage,
+  IDirectMessageTab,
+  IMessage,
+  IUser,
+};

@@ -78,22 +78,24 @@ function MessageForm() {
   };
 
   return (
-    <div className='mx-2 my-2 flex items-center justify-center rounded-md bg-wire-400 px-2 py-1'>
-      <TextareaAutosize
-        maxRows={3}
-        name='content'
-        id='messsage-content'
-        placeholder='Type here...' // replace with Message {convo} in future
-        onChange={handleTyping}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && e.shiftKey === false) {
-            e.preventDefault();
-            handleSendMessage(e);
-          }
-        }}
-        className='flex-1 resize-none rounded-md bg-wire-400 px-2 placeholder-wire-50 outline-none placeholder:italic'
-      />
-      <button id='send-message' type='submit' className='hidden' />
+    <div id='message-input' className='flex flex-col'>
+      <div className='mx-2 my-2 flex items-center justify-center rounded-md bg-wire-400 px-2 py-1'>
+        <TextareaAutosize
+          maxRows={3}
+          name='content'
+          id='messsage-content'
+          placeholder='Type here...' // replace with Message {convo} in future
+          onChange={handleTyping}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && e.shiftKey === false) {
+              e.preventDefault();
+              handleSendMessage(e);
+            }
+          }}
+          className='flex-1 resize-none rounded-md bg-wire-400 px-2 placeholder-wire-50 outline-none placeholder:italic'
+        />
+        <button id='send-message' type='submit' className='hidden' />
+      </div>
     </div>
   );
 }

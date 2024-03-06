@@ -1,7 +1,13 @@
-function LeftSidebar() {
+import Conversations from './Conversations';
+
+function LeftSidebar({
+  setConversation,
+}: {
+  setConversation: React.Dispatch<React.SetStateAction<string>>;
+}) {
   return (
     <div id='conversations-and-profile' className='bg-wire-600'>
-      <div id='conversations'></div>
+      <Conversations setConversation={setConversation} />
       <div id='profile'></div>
     </div>
   );

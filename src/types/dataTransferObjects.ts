@@ -7,8 +7,12 @@ interface ITypingIndication {
   typing: boolean;
 }
 
+interface IJoinRoom {
+  room: string;
+}
+
 type Action<T = ISendMessage | ITypingIndication> = {
   action: string;
 } & T;
 
-export type { Action, ISendMessage, ITypingIndication };
+export type { Action, IJoinRoom, ISendMessage, ITypingIndication };

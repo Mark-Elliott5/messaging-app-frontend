@@ -3,53 +3,63 @@ import { IMessage } from '../types/fetchTypes';
 import { useEffect, useRef, useState } from 'react';
 import { getMessages } from '../fetch/fetchFunctions';
 import TypingIndicator from './TypingIndicator';
+import { Action, IJoinRoom } from '../types/dataTransferObjects';
 
-function MessageList() {
+function MessageList({ conversation }: { conversation: string }) {
   // needs conversation id inherited from state to supply to first websocket hook arg
   const [loading, setLoading] = useState(true);
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
   const messageBuffer = useRef<IMessage[]>([]);
 
-  const { readyState } = useWebsocket('wss://echo.websocket.events', {
-    share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('MessageList websocket opened'),
-    onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
-    onMessage: (e) => {
-      // console.log('MessageList websocket message recieved');
-      console.log(e);
-      if (e.data.type === 'message') {
-        const { message } = e.data;
-        if (loading) {
-          messageBuffer.current.push(message);
-        } else {
-          setMessageHistory((prevState) => [...prevState, message]);
+  const { readyState, sendMessage } = useWebsocket(
+    'wss://echo.websocket.events',
+    {
+      share: true, // Shares ws connection to same URL between components
+      onOpen: () => {
+        const data: Action<IJoinRoom> = {
+          action: 'joinRoom',
+          room: conversation,
+        };
+        sendMessage(JSON.stringify(data));
+      },
+      onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
+      onMessage: (e) => {
+        // console.log('MessageList websocket message recieved');
+        console.log(e);
+        if (e.data.type === 'message') {
+          const { message } = e.data;
+          if (loading) {
+            messageBuffer.current.push(message);
+          } else {
+            setMessageHistory((prevState) => [...prevState, message]);
+          }
         }
-      }
-    },
-    onError: () => console.log('MessageList websocket error'),
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is 'Normal Closure'
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?,
-    filter: (e) => {
-      try {
-        const data = JSON.parse(e.data);
-        if (data.type === 'message') {
+      },
+      onError: () => console.log('MessageList websocket error'),
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is 'Normal Closure'
+        if (e.code !== 1000) {
           return true;
         }
         return false;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-  });
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?,
+      filter: (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (data.type === 'message') {
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      },
+    }
+  );
 
   const formatDate = (date: Date) => {
     const month = date.getMonth();
@@ -78,7 +88,7 @@ function MessageList() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await getMessages('insert app state variable here');
+        const response = await getMessages(conversation);
         const { messages } = response.data;
         if (!messages) {
           setLoading(false);
@@ -96,7 +106,7 @@ function MessageList() {
     };
 
     fetchMessages();
-  }, []);
+  }, [conversation]);
 
   console.log(readyState);
 

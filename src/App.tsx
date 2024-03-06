@@ -5,12 +5,13 @@ import RightSidebar from './components/RightSidebar';
 import LoginPage from './components/LoginPage';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [conversation, setConversation] = useState<string>('general');
 
   return loggedIn ? (
     <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
-      <LeftSidebar />
-      <MiddleColumn />
+      <LeftSidebar setConversation={setConversation} />
+      <MiddleColumn conversation={conversation} />
       <RightSidebar />
     </div>
   ) : (
