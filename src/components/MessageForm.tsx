@@ -6,6 +6,7 @@ import {
 // import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import useWebsocket from 'react-use-websocket';
 import TextareaAutosize from 'react-textarea-autosize';
+import { useRef } from 'react';
 
 function MessageForm() {
   // needs app state conversation variable to placeholder "Message {conversation}"
@@ -33,14 +34,21 @@ function MessageForm() {
     }
   );
 
+  const lastTypingSent = useRef(false);
+
   const handleTyping: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     if (readyState !== 1) {
       return;
     }
+    const typing = e.target.value !== '' ?? false;
+    if (lastTypingSent.current === typing) {
+      return;
+    }
     const data: Action<ITypingIndication> = {
       action: 'typing',
-      typing: e.target.value !== '' ?? false,
+      typing,
     };
+    lastTypingSent.current = typing;
     sendMessage(JSON.stringify(data));
   };
 
@@ -60,6 +68,7 @@ function MessageForm() {
         typing: false,
       })
     );
+    lastTypingSent.current = false;
     const data: Action<ISendMessage> = {
       action: 'submitMessage',
       content,
@@ -74,7 +83,7 @@ function MessageForm() {
         maxRows={3}
         name='content'
         id='messsage-content'
-        placeholder='Type here...'
+        placeholder='Type here...' // replace with Message {convo} in future
         onChange={handleTyping}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && e.shiftKey === false) {
@@ -82,7 +91,7 @@ function MessageForm() {
             handleSendMessage(e);
           }
         }}
-        className='flex-1 resize-none rounded-md bg-wire-400 px-2 outline-none'
+        className='flex-1 resize-none rounded-md bg-wire-400 px-2 placeholder-wire-50 outline-none placeholder:italic'
       />
       <button id='send-message' type='submit' className='hidden' />
     </div>
