@@ -10,7 +10,7 @@ function MessageList() {
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
   const messageBuffer = useRef<IMessage[]>([]);
 
-  useWebsocket('wss://echo.websocket.events', {
+  const { readyState } = useWebsocket('wss://echo.websocket.events', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => console.log('MessageList websocket opened'),
     onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
@@ -98,21 +98,41 @@ function MessageList() {
     fetchMessages();
   }, []);
 
+  console.log(readyState);
+
+  const connectionStatusClasses = (() => {
+    if (readyState === -1 || readyState >= 2) {
+      return 'bg-red-400 border-red-500';
+    }
+    if (readyState === 0) {
+      return 'bg-yellow-400 border-yellow-500';
+    }
+    if (readyState === 1) {
+      return 'bg-green-400 border-green-500';
+    }
+  })();
+
   return (
     <>
+      <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-400 p-2'>
+        <span
+          className={`h-3 w-3 ${connectionStatusClasses} rounded-full border-1`}
+        />
+        <span className='font-bold'>General</span>
+      </div>
       <div
         id='messages'
-        className='relative flex flex-1 flex-col items-center justify-center'
+        className='relative flex h-dvh flex-[1_1_0] flex-col-reverse overflow-y-scroll'
       >
         {messages?.length ? (
           messages
         ) : loading ? (
-          <p className='text-center'>Loading...</p>
+          <p className='text-center italic'>Loading...</p>
         ) : (
-          <p className='text-center'>No messages yet!</p>
+          <p className='text-center italic'>No messages yet!</p>
         )}
-        <TypingIndicator />
       </div>
+      <TypingIndicator />
     </>
   );
 }

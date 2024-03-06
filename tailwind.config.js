@@ -56,6 +56,18 @@ export default {
           950: '#040506',
         },
       },
+      fontFamily: {
+        inter: [
+          '"Inter"',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji',
+        ],
+      },
     },
   },
   plugins: [],

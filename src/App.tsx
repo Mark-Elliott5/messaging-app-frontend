@@ -4,7 +4,7 @@ import RightSidebar from './components/RightSidebar';
 
 function App() {
   return (
-    <div className='grid grid-cols-131 h-dvh w-dvw'>
+    <div className='font-inter grid h-dvh w-dvw grid-cols-131'>
       <LeftSidebar />
       <MiddleColumn />
       <RightSidebar />
