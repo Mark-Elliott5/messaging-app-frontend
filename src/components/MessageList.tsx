@@ -26,13 +26,18 @@ function MessageList({ conversation }: { conversation: string }) {
       onMessage: (e) => {
         // console.log('MessageList websocket message recieved');
         console.log(e);
-        if (e.data.type === 'message') {
-          const { message } = e.data;
-          if (loading) {
-            messageBuffer.current.push(message);
-          } else {
-            setMessageHistory((prevState) => [...prevState, message]);
+        try {
+          const data = JSON.parse(e.data);
+          if (data.type === 'message') {
+            const { message } = data;
+            if (loading) {
+              messageBuffer.current.push(message);
+            } else {
+              setMessageHistory((prevState) => [...prevState, message]);
+            }
           }
+        } catch (err) {
+          console.log(err);
         }
       },
       onError: () => console.log('MessageList websocket error'),

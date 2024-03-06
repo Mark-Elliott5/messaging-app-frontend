@@ -18,13 +18,18 @@ function Conversations({
     onClose: (e) => console.log('Conversation websocket closed: ' + e.reason),
     onMessage: (e) => {
       // console.log('Conversation websocket message recieved');
-      if (e.data.type === 'tabs') {
-        const { tab } = e.data;
-        if (loading) {
-          tabsBuffer.current.push(tab);
-        } else {
-          setTabsHistory((prevState) => [...prevState, tab]);
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'tabs') {
+          const { tab } = data;
+          if (loading) {
+            tabsBuffer.current.push(tab);
+          } else {
+            setTabsHistory((prevState) => [...prevState, tab]);
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
     },
     onError: () => console.log('Conversation websocket error'),
@@ -86,7 +91,7 @@ function Conversations({
 
   return (
     <>
-      <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-500 p-2'>
+      <div className='flex w-full items-center gap-2 bg-wire-500 p-2'>
         <span className='font-bold'>Rooms</span>
       </div>
       <div id='conversations' className='flex flex-col'>
