@@ -69,25 +69,27 @@ function TypingIndicator() {
   })();
 
   return (
-    <AnimatePresence>
-      {usersTyping && (
-        <LazyMotion features={domAnimation}>
-          <m.div
-            animate={{
-              transition: { duration: 0.2 },
-              y: 0,
-              opacity: 1,
-            }}
-            exit={{ y: 6, opacity: 0 }}
-            style={{ display: 'inline-block', y: 6, opacity: 0 }}
-            className='absolute bottom-0 left-0 px-1'
-          >
-            <span className='pl-2 text-2xs'>{'mark is typing'}</span>
-            <AnimatedEllipses />
-          </m.div>
-        </LazyMotion>
-      )}
-    </AnimatePresence>
+    <div className='h-5'>
+      <AnimatePresence>
+        {usersTyping && (
+          <LazyMotion features={domAnimation}>
+            <m.div
+              animate={{
+                transition: { duration: 0.2 },
+                y: 0,
+                opacity: 1,
+              }}
+              exit={{ y: 6, opacity: 0 }}
+              style={{ display: 'inline-block', y: 6, opacity: 0 }}
+              className='ml-1'
+            >
+              <span className='pl-2 text-2xs'>{'mark is typing'}</span>
+              <AnimatedEllipses />
+            </m.div>
+          </LazyMotion>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
