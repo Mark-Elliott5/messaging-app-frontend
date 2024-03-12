@@ -1,5 +1,5 @@
 interface ISendMessage {
-  content: FormDataEntryValue;
+  content: string; // FormDataEntryValue
   // need to add current channel property inherited from App.tsx
 }
 
@@ -11,7 +11,7 @@ interface IJoinRoom {
   room: string;
 }
 
-type Action<T = ISendMessage | ITypingIndication> = {
+type Action<T = ISendMessage | ITypingIndication | IJoinRoom> = {
   action: string;
 } & T;
 

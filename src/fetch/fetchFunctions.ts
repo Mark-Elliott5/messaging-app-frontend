@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import { IDirectMessageTab, IMessage } from '../types/fetchTypes';
 
-async function getMessages(conversationId: string) {
+async function getMessages(roomId: string) {
   try {
     const response: AxiosResponse<{ messages: IMessage[] }> = await axios.get(
-      `/api/getMessages/${conversationId}`
+      `/api/messages/${roomId}`
     );
     return response;
   } catch (error) {
@@ -16,7 +16,7 @@ async function getMessages(conversationId: string) {
 async function getDMTabs() {
   try {
     const response: AxiosResponse<{ directMessageTabs: IDirectMessageTab[] }> =
-      await axios.get(`/api/getDirectMessages/`);
+      await axios.get(`/api/directmessages/`);
     return response;
   } catch (error) {
     console.error(`Axios GET DM tabs error: ${error}`);
@@ -24,12 +24,23 @@ async function getDMTabs() {
   }
 }
 
+// async function getDMs() {
+//   try {
+//     const response: AxiosResponse<{ directMessageTabs: IDirectMessageTab[] }> =
+//       await axios.get(`/api/directmessages/`);
+//     return response;
+//   } catch (error) {
+//     console.error(`Axios GET DM tabs error: ${error}`);
+//     return Promise.reject(error);
+//   }
+// }
+
 async function login(username: string, password: string) {
   try {
     const response: AxiosResponse<{
       authenticated: boolean;
       message?: string;
-    }> = await axios.post('/api/login', {
+    }> = await axios.post('/login', {
       username,
       password,
     });
@@ -45,7 +56,7 @@ async function guestLogin(username: string) {
     const response: AxiosResponse<{
       authenticated: boolean;
       message?: string;
-    }> = await axios.post('/api/login', {
+    }> = await axios.post('/guestlogin', {
       username,
     });
     return response;
@@ -60,7 +71,7 @@ async function register(username: string, password: string) {
     const response: AxiosResponse<{
       authenticated: boolean;
       message?: string;
-    }> = await axios.post('/api/login', {
+    }> = await axios.post('/register', {
       username,
       password,
     });
@@ -73,11 +84,13 @@ async function register(username: string, password: string) {
 
 export { getMessages, getDMTabs, guestLogin, login, register };
 
+///
+
 // {
 //   Id,
 //   Content,
 //   Sender: points to Member document,
 //   Recipient: points to Member document (or general chat document),
-//   Conversation,
+//   room,
 //   Date: date,
 //   }
