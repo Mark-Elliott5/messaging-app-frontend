@@ -195,7 +195,7 @@ function LoginPage({
             }}
             exit={{ opacity: 0 }}
             style={{ scale: 0.1 }}
-            className='md:w-unset md:h-unset flex h-dvh w-dvw flex-col items-center justify-center gap-2 rounded-md bg-wire-600 p-24 shadow-x'
+            className='flex h-dvh w-dvw flex-col items-center justify-center gap-2 rounded-md bg-wire-600 p-24 shadow-x md:h-unset md:w-unset'
           >
             <h1>Welcome to Wire</h1>
             <h2>Chat Room</h2>
