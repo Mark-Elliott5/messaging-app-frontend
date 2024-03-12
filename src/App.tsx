@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import UsersOnline from './components/usersOnline';
+import UsersOnline from './components/UsersOnline';
 import LoginPage from './components/LoginPage';
 import Rooms from './components/Rooms';
 import MessageList from './components/MessageList';
@@ -8,12 +8,12 @@ import MessageForm from './components/MessageForm';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [room, setroom] = useState<string>('general');
+  const [room, setRoom] = useState<string>('general');
 
   return loggedIn ? (
     <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
       <div id='rooms-and-profile' className='bg-wire-600'>
-        <Rooms room={room} setroom={setroom} />
+        <Rooms room={room} setRoom={setRoom} />
         <div id='profile'></div>
       </div>
       <div

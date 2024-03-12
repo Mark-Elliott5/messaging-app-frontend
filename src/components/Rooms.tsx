@@ -6,10 +6,10 @@ import { Action, IJoinRoom } from '../types/dataTransferObjects';
 
 function Rooms({
   room,
-  setroom,
+  setRoom,
 }: {
   room: string;
-  setroom: React.Dispatch<React.SetStateAction<string>>;
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [loading, setLoading] = useState(true);
   const [tabsHistory, setTabsHistory] = useState<IDirectMessageTab[]>([]);
@@ -66,16 +66,16 @@ function Rooms({
     }
     const data: Action<IJoinRoom> = {
       action: 'joinRoom',
-      room,
+      room: currentRoom,
     };
     sendMessage(JSON.stringify(data));
-    setroom(room);
+    setRoom(room);
   };
 
   const tabs = (() => {
     return tabsHistory.length
       ? tabsHistory.map((tab) => (
-          <div onClick={() => setroom(tab._id.toString())}>
+          <div onClick={() => setRoom(tab._id.toString())}>
             <img src={`${tab.sender.avatar}.jpg`}></img>
             <span className=''>{tab.sender.username}</span>
           </div>
@@ -124,7 +124,7 @@ function Rooms({
           }}
         >
           {/* <img src={`${tab.sender.avatar}.jpg`}></img> */}
-          <span className='inline-block w-full bg-wire-300 pl-2'>Test</span>
+          <span className='inline-block w-full bg-wire-300 pl-2'>Gaming</span>
         </div>
         <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-500 p-2'>
           <span className='font-bold'>Messages</span>

@@ -6,33 +6,28 @@ import {
 // import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import useWebsocket from 'react-use-websocket';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-function MessageForm() {
-  // needs app state conversation variable to placeholder "Message {conversation}"
-  const { sendMessage, readyState } = useWebsocket(
-    'wss://echo.websocket.events',
-    {
-      share: true, // Shares ws connection to same URL between components
-      onOpen: () => console.log('MessageForm websocket opened'),
-      onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
-      // onMessage: () => console.log('MessageForm websocket message'),
-      onError: () => console.log('MessageForm websocket error'),
-      retryOnError: true,
-      shouldReconnect: (e) => {
-        // code 1000 is "Normal Closure"
-        if (e.code !== 1000) {
-          return true;
-        }
-        return false;
-      },
-      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-      reconnectInterval: 3000, // Milliseconds?,
-      filter: () => {
-        return false;
-      },
-    }
-  );
+function MessageForm({ room }: { room: string }) {
+  // needs app state room variable to placeholder "Message {room}"
+  const { sendMessage, readyState } = useWebsocket('ws://localhost:3000/echo', {
+    share: true, // Shares ws connection to same URL between components
+    onOpen: () => console.log('MessageForm websocket opened'),
+    onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
+    // onMessage: () => console.log('MessageForm websocket message'),
+    onError: () => console.log('MessageForm websocket error'),
+    retryOnError: true,
+    shouldReconnect: (e) => {
+      // code 1000 is "Normal Closure"
+      if (e.code !== 1000) {
+        return true;
+      }
+      return false;
+    },
+    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+    reconnectInterval: 3000, // Milliseconds?,
+    filter: () => false,
+  });
 
   const lastTypingSent = useRef(false);
 
@@ -40,7 +35,7 @@ function MessageForm() {
     if (readyState !== 1) {
       return;
     }
-    const typing = e.target.value !== '' ?? false;
+    const typing = !!e.target.value;
     if (lastTypingSent.current === typing) {
       return;
     }
@@ -76,6 +71,10 @@ function MessageForm() {
     sendMessage(JSON.stringify(data));
     e.currentTarget.value = '';
   };
+
+  useEffect(() => {
+    lastTypingSent.current = false;
+  }, [room]);
 
   return (
     <div id='message-input' className='flex flex-col'>

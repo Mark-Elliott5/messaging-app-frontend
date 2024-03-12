@@ -1,72 +1,82 @@
 import useWebsocket from 'react-use-websocket';
 import { IMessage } from '../types/fetchTypes';
-import { useEffect, useRef, useState } from 'react';
-import { getMessages } from '../fetch/fetchFunctions';
-import TypingIndicator from './TypingIndicator';
+import { useEffect, useState } from 'react';
+// import { getMessages } from '../fetch/fetchFunctions';
 import { Action, IJoinRoom } from '../types/dataTransferObjects';
 
-function MessageList({ conversation }: { conversation: string }) {
-  // needs conversation id inherited from state to supply to first websocket hook arg
-  const [loading, setLoading] = useState(true);
+function MessageList({ room }: { room: string }) {
+  // needs room id inherited from state to supply to first websocket hook arg
+  const [loading] = useState(false);
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
-  const messageBuffer = useRef<IMessage[]>([]);
+  // const messageBuffer = useRef<IMessage[]>([]);
 
-  const { readyState, sendMessage } = useWebsocket(
-    'wss://echo.websocket.events',
-    {
-      share: true, // Shares ws connection to same URL between components
-      onOpen: () => {
-        const data: Action<IJoinRoom> = {
-          action: 'joinRoom',
-          room: conversation,
-        };
-        sendMessage(JSON.stringify(data));
-      },
-      onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
-      onMessage: (e) => {
-        // console.log('MessageList websocket message recieved');
-        console.log(e);
-        try {
-          const data = JSON.parse(e.data);
-          if (data.type === 'message') {
-            const { message } = data;
-            if (loading) {
-              messageBuffer.current.push(message);
-            } else {
-              setMessageHistory((prevState) => [...prevState, message]);
-            }
+  const { readyState, sendMessage } = useWebsocket('ws://localhost:3000/echo', {
+    share: true, // Shares ws connection to same URL between components
+    onOpen: () => {
+      console.log('connected');
+      const data: Action<IJoinRoom> = {
+        action: 'joinRoom',
+        room: room,
+      };
+      sendMessage(JSON.stringify(data));
+      console.log('sent join');
+      // console.log(JSON.stringify(data));
+      // console.log('joinRoom sent');
+    },
+    onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
+    onMessage: (e) => {
+      console.log(e);
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'message') {
+          if (loading) {
+            // messageBuffer.current.push(message);
+          } else {
+            console.log('setting history');
+            setMessageHistory((prevState) => [...prevState, data]);
           }
-        } catch (err) {
-          console.log(err);
         }
-      },
-      onError: () => console.log('MessageList websocket error'),
-      retryOnError: true,
-      shouldReconnect: (e) => {
-        // code 1000 is 'Normal Closure'
-        if (e.code !== 1000) {
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    onError: (err) => {
+      console.log('MessageList websocket error: ');
+      console.log(err);
+    },
+    retryOnError: true,
+    shouldReconnect: (e) => {
+      // code 1000 is 'Normal Closure'
+      if (e.code !== 1000) {
+        return true;
+      }
+      return false;
+    },
+    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+    reconnectInterval: 3000, // Milliseconds?,
+    // Every time readyState or lastMessage changes, the component rerenders, even
+    // if it is not destructured from useWebsocket or used in the function body.
+    // when filter returns false, lastMessage will not be updated. The 'on" options
+    // (onMessage, etc), will still receive filtered messages though, which we
+    // can then use to update our own state or reference. so filter stops unnecessary
+    // automatic rerenders, then we can handle the message in onMessage
+    filter: (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'message') {
           return true;
         }
+        console.log('messagelist filtered out message');
         return false;
-      },
-      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-      reconnectInterval: 3000, // Milliseconds?,
-      filter: (e) => {
-        try {
-          const data = JSON.parse(e.data);
-          if (data.type === 'message') {
-            return true;
-          }
-          return false;
-        } catch (err) {
-          console.log(err);
-          return false;
-        }
-      },
-    }
-  );
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    },
+  });
 
-  const formatDate = (date: Date) => {
+  const formatDate = (str: string) => {
+    const date = new Date(str);
     const month = date.getMonth();
     const day = date.getDate();
     const year = date.getFullYear();
@@ -74,13 +84,17 @@ function MessageList({ conversation }: { conversation: string }) {
   };
 
   const messages = (() => {
+    messageHistory.map((e) => {
+      console.log('logging message');
+      console.log(e);
+    });
     return messageHistory.length
-      ? messageHistory.map((message) => (
+      ? messageHistory.reverse().map((message) => (
           <div>
-            <img src={`${message.sender.avatar}.jpg`}></img>
+            <img src={`${message.user?.avatar}.jpg`}></img>
             <div>
               <div>
-                <span className=''>{message.sender.username}</span>
+                <span className=''>{message.user?.username}</span>
                 <span className=''>{formatDate(message.date)}</span>
               </div>
               <p>{message.content}</p>
@@ -89,31 +103,6 @@ function MessageList({ conversation }: { conversation: string }) {
         ))
       : null;
   })();
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await getMessages(conversation);
-        const { messages } = response.data;
-        if (!messages) {
-          setLoading(false);
-          throw new Error('No messages received.');
-        }
-        console.log(
-          `Messages loaded: ${'app state (conversation) variable here'}`
-        );
-        const history = messages.concat(messageBuffer.current);
-        setMessageHistory(history);
-        setLoading(false);
-      } catch (err) {
-        console.error('getMessages error: ' + err);
-      }
-    };
-
-    fetchMessages();
-  }, [conversation]);
-
-  console.log(readyState);
 
   const connectionStatusClasses = (() => {
     if (readyState === -1 || readyState >= 2) {
@@ -126,6 +115,38 @@ function MessageList({ conversation }: { conversation: string }) {
       return 'bg-green-400 border-green-500';
     }
   })();
+
+  useEffect(() => {
+    setMessageHistory([]);
+  }, [room]);
+
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     try {
+  //       // const response = await getMessages(room);
+  //       // const { messages } = response.data;
+  //       // if (!messages) {
+  //       //   setLoading(false);
+  //       //   throw new Error('No messages received.');
+  //       // }
+  //       // console.log(
+  //       //   `Messages loaded: ${'app state (room) variable here'}`
+  //       // );
+  //       // const history = messages.concat(messageBuffer.current);
+  //       // setMessageHistory(history);
+  //       const data: Action<IJoinRoom> = {
+  //         action: 'joinRoom',
+  //         room: room,
+  //       };
+  //       sendMessage(JSON.stringify(data));
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error('getMessages error: ' + err);
+  //     }
+  //   };
+
+  //   fetchMessages();
+  // }, [room]);
 
   return (
     <>
@@ -147,7 +168,6 @@ function MessageList({ conversation }: { conversation: string }) {
           <p className='text-center italic'>No messages yet!</p>
         )}
       </div>
-      <TypingIndicator />
     </>
   );
 }
