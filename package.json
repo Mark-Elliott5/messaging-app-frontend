@@ -7,7 +7,6 @@
     "dev": "vite",
     "buildwatch": "tsc && vite build --watch",
     "build": "tsc && vite build",
-    "tailwind": "npx tailwindcss -i ./src/index.css -o ./public/style.css --watch",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "preinstall": "npx -y only-allow pnpm"

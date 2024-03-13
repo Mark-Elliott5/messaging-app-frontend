@@ -1,6 +1,5 @@
 interface ISendMessage {
   content: string; // FormDataEntryValue
-  // need to add current channel property inherited from App.tsx
 }
 
 interface ITypingIndication {

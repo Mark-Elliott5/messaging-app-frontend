@@ -7,14 +7,27 @@ export default defineConfig(({ command }) => {
     return {
       plugins: [react()],
       build: {
+        emptyOutDir: true,
         outDir: 'build',
+        sourcemap: true,
       },
     };
   } else {
     // command === 'build'
     return {
-      plugins: [react()],
+      plugins: [
+        react(),
+        {
+          name: 'renameIndex',
+          enforce: 'post',
+          generateBundle(options, bundle) {
+            const indexHtml = bundle['index.html'];
+            indexHtml.fileName = 'app.html';
+          },
+        },
+      ],
       build: {
+        emptyOutDir: true,
         outDir: 'build',
         sourcemap: true,
         minify: false,

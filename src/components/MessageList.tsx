@@ -1,8 +1,9 @@
 import useWebsocket from 'react-use-websocket';
-import { IMessage } from '../types/fetchTypes';
+import { IMessage } from '../types/wsMessageTypes';
 import { useEffect, useState } from 'react';
 // import { getMessages } from '../fetch/fetchFunctions';
-import { Action, IJoinRoom } from '../types/dataTransferObjects';
+import { Action, IJoinRoom } from '../types/wsActionTypes';
+import Message from './Message';
 
 function MessageList({ room }: { room: string }) {
   // needs room id inherited from state to supply to first websocket hook arg
@@ -10,7 +11,7 @@ function MessageList({ room }: { room: string }) {
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
   // const messageBuffer = useRef<IMessage[]>([]);
 
-  const { readyState, sendMessage } = useWebsocket('ws://localhost:3000/echo', {
+  const { readyState, sendMessage } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => {
       console.log('connected');
@@ -75,32 +76,13 @@ function MessageList({ room }: { room: string }) {
     },
   });
 
-  const formatDate = (str: string) => {
-    const date = new Date(str);
-    const month = date.getMonth();
-    const day = date.getDate();
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
-  };
-
   const messages = (() => {
     messageHistory.map((e) => {
       console.log('logging message');
       console.log(e);
     });
     return messageHistory.length
-      ? messageHistory.reverse().map((message) => (
-          <div>
-            <img src={`${message.user?.avatar}.jpg`}></img>
-            <div>
-              <div>
-                <span className=''>{message.user?.username}</span>
-                <span className=''>{formatDate(message.date)}</span>
-              </div>
-              <p>{message.content}</p>
-            </div>
-          </div>
-        ))
+      ? messageHistory.reverse().map((message) => <Message message={message} />)
       : null;
   })();
 
@@ -120,41 +102,13 @@ function MessageList({ room }: { room: string }) {
     setMessageHistory([]);
   }, [room]);
 
-  // useEffect(() => {
-  //   const fetchMessages = async () => {
-  //     try {
-  //       // const response = await getMessages(room);
-  //       // const { messages } = response.data;
-  //       // if (!messages) {
-  //       //   setLoading(false);
-  //       //   throw new Error('No messages received.');
-  //       // }
-  //       // console.log(
-  //       //   `Messages loaded: ${'app state (room) variable here'}`
-  //       // );
-  //       // const history = messages.concat(messageBuffer.current);
-  //       // setMessageHistory(history);
-  //       const data: Action<IJoinRoom> = {
-  //         action: 'joinRoom',
-  //         room: room,
-  //       };
-  //       sendMessage(JSON.stringify(data));
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error('getMessages error: ' + err);
-  //     }
-  //   };
-
-  //   fetchMessages();
-  // }, [room]);
-
   return (
     <>
       <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-400 p-2'>
         <span
           className={`h-3 w-3 ${connectionStatusClasses} rounded-full border-1`}
         />
-        <span className='font-bold'>General</span>
+        <span className='font-bold'>{room}</span>
       </div>
       <div
         id='messages'

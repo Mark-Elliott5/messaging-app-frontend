@@ -2,7 +2,7 @@ import {
   Action,
   ISendMessage,
   ITypingIndication,
-} from '../types/dataTransferObjects';
+} from '../types/wsActionTypes';
 // import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import useWebsocket from 'react-use-websocket';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
 
 function MessageForm({ room }: { room: string }) {
   // needs app state room variable to placeholder "Message {room}"
-  const { sendMessage, readyState } = useWebsocket('ws://localhost:3000/echo', {
+  const { sendMessage, readyState } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => console.log('MessageForm websocket opened'),
     onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),

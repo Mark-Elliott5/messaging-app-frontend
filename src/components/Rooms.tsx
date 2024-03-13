@@ -1,35 +1,37 @@
 import useWebsocket from 'react-use-websocket';
-import { useEffect, useRef, useState } from 'react';
-import { getDMTabs } from '../fetch/fetchFunctions';
-import { IDirectMessageTab } from '../types/fetchTypes';
-import { Action, IJoinRoom } from '../types/dataTransferObjects';
+import { useState } from 'react';
+import { IBlocked, IDMTab } from '../types/wsMessageTypes';
+import { Action, IJoinRoom } from '../types/wsActionTypes';
+import DMTab from './DMTab';
 
 function Rooms({
   room,
   setRoom,
+  setLoggedIn,
 }: {
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [loading, setLoading] = useState(true);
-  const [tabsHistory, setTabsHistory] = useState<IDirectMessageTab[]>([]);
-  const tabsBuffer = useRef<IDirectMessageTab[]>([]);
+  const [tabsHistory, setTabsHistory] = useState<Map<string, IDMTab>>(
+    new Map()
+  );
 
-  const { sendMessage } = useWebsocket('ws://localhost:3000/echo', {
+  const { sendMessage } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => console.log('room websocket opened'),
     onClose: (e) => console.log('room websocket closed: ' + e.reason),
     onMessage: (e) => {
       // console.log('room websocket message recieved');
       try {
-        const data = JSON.parse(e.data);
-        if (data.type === 'tabs') {
-          const { tab } = data;
-          if (loading) {
-            tabsBuffer.current.push(tab);
-          } else {
-            setTabsHistory((prevState) => [...prevState, tab]);
-          }
+        const data: IBlocked | IDMTab = JSON.parse(e.data);
+        if (data.type === 'blocked') {
+          setLoggedIn(false);
+        }
+        if (data.type === 'dmTab') {
+          const newHistory = new Map(tabsHistory);
+          newHistory.set(data.sender.username, data);
+          setTabsHistory(newHistory);
         }
       } catch (error) {
         console.log(error);
@@ -69,40 +71,16 @@ function Rooms({
       room: currentRoom,
     };
     sendMessage(JSON.stringify(data));
-    setRoom(room);
+    setRoom(currentRoom);
   };
 
   const tabs = (() => {
-    return tabsHistory.length
-      ? tabsHistory.map((tab) => (
-          <div onClick={() => setRoom(tab._id.toString())}>
-            <img src={`${tab.sender.avatar}.jpg`}></img>
-            <span className=''>{tab.sender.username}</span>
-          </div>
+    return tabsHistory.size
+      ? Array.from(tabsHistory.values()).map((tab) => (
+          <DMTab handleClick={handleClick} tab={tab} />
         ))
       : null;
   })();
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await getDMTabs();
-        const { directMessageTabs } = response.data;
-        if (!directMessageTabs) {
-          setLoading(false);
-          throw new Error('No messages received.');
-        }
-        console.log(`DM Tabs loaded`);
-        const history = directMessageTabs.concat(tabsBuffer.current);
-        setTabsHistory(history);
-        setLoading(false);
-      } catch (err) {
-        console.error('getDMTabs error: ' + err);
-      }
-    };
-
-    fetchMessages();
-  }, []);
 
   return (
     <>
@@ -112,7 +90,7 @@ function Rooms({
       <div id='rooms' className='flex flex-col'>
         <div
           onClick={() => {
-            handleClick('general');
+            handleClick('General');
           }}
         >
           {/* <img src={`${tab.sender.avatar}.jpg`}></img> */}
@@ -120,7 +98,7 @@ function Rooms({
         </div>
         <div
           onClick={() => {
-            handleClick('gaming');
+            handleClick('Gaming');
           }}
         >
           {/* <img src={`${tab.sender.avatar}.jpg`}></img> */}
@@ -131,8 +109,6 @@ function Rooms({
         </div>
         {tabs?.length ? (
           tabs
-        ) : loading ? (
-          <p className='text-center italic'>Loading...</p>
         ) : (
           <p className='text-center italic'>No DMs yet!</p>
         )}

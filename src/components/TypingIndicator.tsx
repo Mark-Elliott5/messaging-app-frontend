@@ -2,10 +2,11 @@ import AnimatedEllipses from './AnimatedEllipses';
 import useWebsocket from 'react-use-websocket';
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
 import { useState } from 'react';
+import { ITyping } from '../types/wsMessageTypes';
 
 function TypingIndicator() {
   const [typers, setTypers] = useState<Set<string>>(new Set());
-  const { readyState } = useWebsocket('ws://localhost:3000/echo', {
+  const { readyState } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => console.log('Typing indicator websocket opened'),
     onClose: (e) =>
@@ -15,11 +16,7 @@ function TypingIndicator() {
         if (!e.data) {
           return;
         }
-        const data: {
-          type: string;
-          typing: boolean;
-          user: { username: string };
-        } = JSON.parse(e.data);
+        const data: ITyping = JSON.parse(e.data);
         if (data.type === 'typing') {
           const newTypers = new Set(typers);
           data.typing

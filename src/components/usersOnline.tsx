@@ -1,11 +1,13 @@
 import useWebsocket from 'react-use-websocket';
-import { IUser } from '../types/fetchTypes';
 import { useState } from 'react';
+import User from './User';
 
 function UsersOnline() {
-  const [usersOnline, setusersOnline] = useState<IUser[]>([]);
+  const [usersOnline, setUsersOnline] = useState<
+    { username: string; avatar: number; bio: string }[]
+  >([]);
 
-  useWebsocket('ws://localhost:3000/echo', {
+  useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     // onOpen: (e) => {},
     onClose: (e) => console.log('usersOnline websocket closed: ' + e.reason),
@@ -16,7 +18,7 @@ function UsersOnline() {
         if (data.type === 'usersOnline') {
           const { users } = data;
           if (users) {
-            setusersOnline(users);
+            setUsersOnline(users);
           }
         }
       } catch (err) {
@@ -50,12 +52,7 @@ function UsersOnline() {
 
   const users = (() => {
     return usersOnline.length
-      ? usersOnline.map((user) => (
-          <div>
-            <img src={`${user.avatar}.jpg`}></img>
-            <span className=''>{user.username}</span>
-          </div>
-        ))
+      ? usersOnline.map((user) => <User user={user} />)
       : null;
   })();
 
