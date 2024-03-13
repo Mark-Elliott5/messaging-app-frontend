@@ -1,8 +1,4 @@
-import {
-  Action,
-  ISendMessage,
-  ITypingIndication,
-} from '../types/wsActionTypes';
+import { ISendMessage, ITypingIndication } from '../types/wsActionTypes';
 // import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import useWebsocket from 'react-use-websocket';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -39,7 +35,7 @@ function MessageForm({ room }: { room: string }) {
     if (lastTypingSent.current === typing) {
       return;
     }
-    const data: Action<ITypingIndication> = {
+    const data: ITypingIndication = {
       action: 'typing',
       typing,
     };
@@ -64,7 +60,7 @@ function MessageForm({ room }: { room: string }) {
       })
     );
     lastTypingSent.current = false;
-    const data: Action<ISendMessage> = {
+    const data: ISendMessage = {
       action: 'submitMessage',
       content,
     };

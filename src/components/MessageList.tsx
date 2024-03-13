@@ -1,8 +1,6 @@
 import useWebsocket from 'react-use-websocket';
 import { IMessage } from '../types/wsMessageTypes';
 import { useEffect, useState } from 'react';
-// import { getMessages } from '../fetch/fetchFunctions';
-import { Action, IJoinRoom } from '../types/wsActionTypes';
 import Message from './Message';
 
 function MessageList({ room }: { room: string }) {
@@ -11,16 +9,9 @@ function MessageList({ room }: { room: string }) {
   const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
   // const messageBuffer = useRef<IMessage[]>([]);
 
-  const { readyState, sendMessage } = useWebsocket('ws://localhost:3000/chat', {
+  const { readyState } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
     onOpen: () => {
-      console.log('connected');
-      const data: Action<IJoinRoom> = {
-        action: 'joinRoom',
-        room: room,
-      };
-      sendMessage(JSON.stringify(data));
-      console.log('sent join');
       // console.log(JSON.stringify(data));
       // console.log('joinRoom sent');
     },

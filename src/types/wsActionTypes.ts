@@ -1,17 +1,18 @@
 interface ISendMessage {
+  action: 'submitMessage';
   content: string; // FormDataEntryValue
 }
 
 interface ITypingIndication {
+  action: 'typing';
   typing: boolean;
 }
 
 interface IJoinRoom {
+  action: 'joinRoom';
   room: string;
 }
 
-type Action<T = ISendMessage | ITypingIndication | IJoinRoom> = {
-  action: string;
-} & T;
+type UserAction = ISendMessage | ITypingIndication | IJoinRoom;
 
-export type { Action, IJoinRoom, ISendMessage, ITypingIndication };
+export type { UserAction, IJoinRoom, ISendMessage, ITypingIndication };

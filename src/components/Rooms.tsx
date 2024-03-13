@@ -1,7 +1,7 @@
 import useWebsocket from 'react-use-websocket';
 import { useState } from 'react';
 import { IBlocked, IDMTab } from '../types/wsMessageTypes';
-import { Action, IJoinRoom } from '../types/wsActionTypes';
+import { IJoinRoom } from '../types/wsActionTypes';
 import DMTab from './DMTab';
 
 function Rooms({
@@ -66,7 +66,7 @@ function Rooms({
     if (room === currentRoom) {
       return;
     }
-    const data: Action<IJoinRoom> = {
+    const data: IJoinRoom = {
       action: 'joinRoom',
       room: currentRoom,
     };
