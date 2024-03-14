@@ -1,25 +1,27 @@
-import { IMessage } from '../types/wsMessageTypes';
+import { IStoredMessage } from '../types/wsMessageTypes';
 
-function Message({ message }: { message: IMessage }) {
-  const formatDate = (str: string) => {
-    const date = new Date(str);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${month}/${day}/${year} ${hours}:${minutes}`;
-  };
+function Message({ message }: { message: IStoredMessage }) {
+  const blurbs = (() => {
+    if (typeof message.content === 'string') {
+      return <p className='mb-1 ml-3'>{message.content}</p>;
+    }
+    return message.content.map((blurb) => <p className='ml-3'>{blurb}</p>);
+  })();
 
   return (
-    <div className='mx-3 my-1'>
-      <img src={`${message.user?.avatar}.jpg`}></img>
-      <div>
-        <div>
+    <div className='my-1 ml-3 mr-8 flex gap-2'>
+      <img
+        className='inline-block h-9 flex-[0_1_0%]'
+        src={`${message.user?.avatar}.png`}
+      ></img>
+      <div className=''>
+        <div className='flex items-center gap-2'>
           <span className=''>{message.user?.username}</span>
-          <span className=''>{formatDate(message.date)}</span>
+          <span className='text-xs text-wire-50'>
+            {new Date(message.date).toLocaleString()}
+          </span>
         </div>
-        <p className='ml-1'>{message.content}</p>
+        {blurbs}
       </div>
     </div>
   );

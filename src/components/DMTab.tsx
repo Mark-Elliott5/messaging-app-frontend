@@ -9,7 +9,7 @@ function DMTab({
 }) {
   return (
     <div onClick={() => handleClick(tab.room)}>
-      <img src={`${tab.sender.avatar}.jpg`}></img>
+      <img src={`${tab.sender.avatar}.png`}></img>
       <span className=''>{tab.sender.username}</span>
     </div>
   );

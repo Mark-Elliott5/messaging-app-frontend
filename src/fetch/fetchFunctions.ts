@@ -21,7 +21,7 @@ async function guestLogin(username: string) {
     const response: AxiosResponse<{
       authenticated: boolean;
       message?: string;
-    }> = await axios.post('/guestlogin', {
+    }> = await axios.post('/guest', {
       username,
     });
     return response;

@@ -2,7 +2,7 @@ import AnimatedEllipses from './AnimatedEllipses';
 import useWebsocket from 'react-use-websocket';
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
 import { useState } from 'react';
-import { ITyping } from '../types/wsMessageTypes';
+import { ITyping, MessageResponse } from '../types/wsMessageTypes';
 
 function TypingIndicator() {
   const [typers, setTypers] = useState<Set<string>>(new Set());
@@ -41,7 +41,7 @@ function TypingIndicator() {
     reconnectInterval: 3000, // Milliseconds?
     filter: (e) => {
       try {
-        const data = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'typing') {
           return true;
         }

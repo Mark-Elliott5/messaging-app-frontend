@@ -1,6 +1,6 @@
 import useWebsocket from 'react-use-websocket';
 import { useState } from 'react';
-import { IBlocked, IDMTab } from '../types/wsMessageTypes';
+import { IBlocked, IDMTab, MessageResponse } from '../types/wsMessageTypes';
 import { IJoinRoom } from '../types/wsActionTypes';
 import DMTab from './DMTab';
 
@@ -29,6 +29,9 @@ function Rooms({
           setLoggedIn(false);
         }
         if (data.type === 'dmTab') {
+          if (tabsHistory.has(data.sender.username)) {
+            return;
+          }
           const newHistory = new Map(tabsHistory);
           newHistory.set(data.sender.username, data);
           setTabsHistory(newHistory);
@@ -50,8 +53,8 @@ function Rooms({
     reconnectInterval: 3000, // Milliseconds?,
     filter: (e) => {
       try {
-        const data = JSON.parse(e.data);
-        if (data.type === 'tabs') {
+        const data: MessageResponse = JSON.parse(e.data);
+        if (data.type === 'dmTab') {
           return true;
         }
         return false;
@@ -74,10 +77,22 @@ function Rooms({
     setRoom(currentRoom);
   };
 
+  const handleDMClick = (currentRoom: string) => {
+    if (room === currentRoom) {
+      return;
+    }
+    const data: IJoinRoom = {
+      action: 'joinRoom',
+      room: currentRoom,
+    };
+    sendMessage(JSON.stringify(data));
+    setRoom(currentRoom);
+  };
+
   const tabs = (() => {
     return tabsHistory.size
       ? Array.from(tabsHistory.values()).map((tab) => (
-          <DMTab handleClick={handleClick} tab={tab} />
+          <DMTab handleClick={handleDMClick} tab={tab} />
         ))
       : null;
   })();
@@ -93,7 +108,7 @@ function Rooms({
             handleClick('General');
           }}
         >
-          {/* <img src={`${tab.sender.avatar}.jpg`}></img> */}
+          {/* <img src={`${tab.sender.avatar}.png`}></img> */}
           <span className='inline-block w-full bg-wire-300 pl-2'>General</span>
         </div>
         <div
@@ -101,7 +116,7 @@ function Rooms({
             handleClick('Gaming');
           }}
         >
-          {/* <img src={`${tab.sender.avatar}.jpg`}></img> */}
+          {/* <img src={`${tab.sender.avatar}.png`}></img> */}
           <span className='inline-block w-full bg-wire-300 pl-2'>Gaming</span>
         </div>
         <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-500 p-2'>

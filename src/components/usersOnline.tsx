@@ -1,11 +1,14 @@
 import useWebsocket from 'react-use-websocket';
 import { useState } from 'react';
 import User from './User';
+import { IUsersOnline, MessageResponse } from '../types/wsMessageTypes';
 
-function UsersOnline() {
-  const [usersOnline, setUsersOnline] = useState<
-    { username: string; avatar: number; bio: string }[]
-  >([]);
+function UsersOnline({
+  setRoom,
+}: {
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const [usersOnline, setUsersOnline] = useState<IUsersOnline>([]);
 
   useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
@@ -14,11 +17,11 @@ function UsersOnline() {
     onMessage: (e) => {
       // console.log('usersOnline websocket message recieved');
       try {
-        const data = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'usersOnline') {
-          const { users } = data;
-          if (users) {
-            setUsersOnline(users);
+          const { usersOnline } = data;
+          if (usersOnline) {
+            setUsersOnline(usersOnline);
           }
         }
       } catch (err) {
@@ -38,7 +41,7 @@ function UsersOnline() {
     reconnectInterval: 3000, // Milliseconds?,
     filter: (e) => {
       try {
-        const data = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'usersOnline') {
           return true;
         }
@@ -52,7 +55,7 @@ function UsersOnline() {
 
   const users = (() => {
     return usersOnline.length
-      ? usersOnline.map((user) => <User user={user} />)
+      ? usersOnline.map((user) => <User user={user} setRoom={setRoom} />)
       : null;
   })();
 

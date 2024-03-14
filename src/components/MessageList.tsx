@@ -1,12 +1,12 @@
 import useWebsocket from 'react-use-websocket';
-import { IMessage } from '../types/wsMessageTypes';
+import { IStoredMessage, MessageResponse } from '../types/wsMessageTypes';
 import { useEffect, useState } from 'react';
 import Message from './Message';
 
 function MessageList({ room }: { room: string }) {
   // needs room id inherited from state to supply to first websocket hook arg
   const [loading] = useState(false);
-  const [messageHistory, setMessageHistory] = useState<IMessage[]>([]);
+  const [messageHistory, setMessageHistory] = useState<IStoredMessage[]>([]);
   // const messageBuffer = useRef<IMessage[]>([]);
 
   const { readyState } = useWebsocket('ws://localhost:3000/chat', {
@@ -17,19 +17,31 @@ function MessageList({ room }: { room: string }) {
     },
     onClose: (e) => console.log('MessageList websocket closed: ' + e.reason),
     onMessage: (e) => {
-      console.log(e);
-      try {
-        const data = JSON.parse(e.data);
-        if (data.type === 'message') {
-          if (loading) {
-            // messageBuffer.current.push(message);
-          } else {
-            console.log('setting history');
-            setMessageHistory((prevState) => [...prevState, data]);
-          }
+      const data: MessageResponse = JSON.parse(e.data);
+      if (data.type === 'message') {
+        const { username, avatar } = data.user;
+        const latestMessage = messageHistory[messageHistory.length - 1];
+        const latestUser = latestMessage?.user.username;
+        if (username !== latestUser) {
+          return setMessageHistory((prevState) => [...prevState, data]);
         }
-      } catch (err) {
-        console.log(err);
+        const newHistory = Array.from(messageHistory);
+        const content =
+          typeof latestMessage.content === 'string'
+            ? [latestMessage.content, data.content]
+            : [...latestMessage.content, data.content];
+        const newMessage: IStoredMessage = {
+          type: 'message',
+          content,
+          user: {
+            username,
+            avatar,
+          },
+          date: data.date,
+        };
+        newHistory.pop();
+        newHistory.push(newMessage);
+        return setMessageHistory(newHistory);
       }
     },
     onError: (err) => {
@@ -53,12 +65,12 @@ function MessageList({ room }: { room: string }) {
     // can then use to update our own state or reference. so filter stops unnecessary
     // automatic rerenders, then we can handle the message in onMessage
     filter: (e) => {
+      console.log(e);
       try {
-        const data = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'message') {
           return true;
         }
-        console.log('messagelist filtered out message');
         return false;
       } catch (err) {
         console.log(err);
@@ -68,12 +80,10 @@ function MessageList({ room }: { room: string }) {
   });
 
   const messages = (() => {
-    messageHistory.map((e) => {
-      console.log('logging message');
-      console.log(e);
-    });
     return messageHistory.length
-      ? messageHistory.reverse().map((message) => <Message message={message} />)
+      ? messageHistory
+          .toReversed()
+          .map((message) => <Message message={message} />)
       : null;
   })();
 

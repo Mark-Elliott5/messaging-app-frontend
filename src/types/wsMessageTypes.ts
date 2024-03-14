@@ -1,13 +1,20 @@
 import { Types } from 'mongoose';
 
-interface IMessage {
+interface IMessageBase {
   type: 'message';
-  content: string;
   user: {
     username: string;
     avatar: number;
   };
   date: string; // strigified, needs to be reconstructed with new Date(x)
+}
+
+interface IMessage extends IMessageBase {
+  content: string;
+}
+
+interface IStoredMessage extends IMessageBase {
+  content: string | string[];
 }
 
 interface IDMTab {
@@ -34,13 +41,15 @@ interface IBlocked {
 }
 
 interface IJoinRoom {
-  type: string;
+  type: 'joinRoom';
   users: string[];
 }
 
-interface IUsersOnline {
-  type: string;
-  usersOnline: string[];
+type IUsersOnline = { username: string; avatar: number; bio: string }[];
+
+interface IUsersOnlineMessage {
+  type: 'usersOnline';
+  usersOnline: IUsersOnline;
 }
 
 interface IUser {
@@ -50,12 +59,23 @@ interface IUser {
   avatar: number;
 }
 
+type MessageResponse =
+  | IMessage
+  | IDMTab
+  | ITyping
+  | IBlocked
+  | IJoinRoom
+  | IUsersOnlineMessage;
+
 export type {
   ITyping,
   IBlocked,
   IJoinRoom,
   IUsersOnline,
+  IUsersOnlineMessage,
   IMessage,
+  IStoredMessage,
   IDMTab,
   IUser,
+  MessageResponse,
 };

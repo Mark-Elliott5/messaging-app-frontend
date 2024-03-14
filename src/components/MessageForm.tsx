@@ -49,7 +49,7 @@ function MessageForm({ room }: { room: string }) {
     if (readyState !== 1) {
       return;
     }
-    const content = e.currentTarget.value;
+    const content = e.currentTarget.value.trim();
     if (!content) {
       return;
     }
@@ -61,8 +61,8 @@ function MessageForm({ room }: { room: string }) {
     );
     lastTypingSent.current = false;
     const data: ISendMessage = {
-      action: 'submitMessage',
-      content,
+      action: 'sendMessage',
+      content: content.trim(),
     };
     sendMessage(JSON.stringify(data));
     e.currentTarget.value = '';
@@ -79,7 +79,7 @@ function MessageForm({ room }: { room: string }) {
           maxRows={3}
           name='content'
           id='messsage-content'
-          placeholder='Type here...' // replace with Message {convo} in future
+          placeholder={`Message ${room}`}
           onChange={handleTyping}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && e.shiftKey === false) {
@@ -87,6 +87,7 @@ function MessageForm({ room }: { room: string }) {
               handleSendMessage(e);
             }
           }}
+          minLength={1}
           className='flex-1 resize-none rounded-md bg-wire-400 px-2 placeholder-wire-50 outline-none placeholder:italic'
         />
         <button id='send-message' type='submit' className='hidden' />

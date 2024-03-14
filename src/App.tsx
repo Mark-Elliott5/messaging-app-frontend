@@ -21,8 +21,6 @@ function App() {
         cookieMap.set(name, value);
       });
       const authenticated = cookieMap.get('loggedIn');
-      console.log(cookieMap);
-      console.log(cookieMap.keys);
       if (authenticated === 'true') {
         console.log(authenticated);
         setLoggedIn(true);
@@ -45,7 +43,7 @@ function App() {
         <TypingIndicator />
         <MessageForm room={room} />
       </div>
-      <UsersOnline />
+      <UsersOnline setRoom={setRoom} />
     </div>
   ) : (
     <LoginPage setLoggedIn={setLoggedIn} />

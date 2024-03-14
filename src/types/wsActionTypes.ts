@@ -1,5 +1,5 @@
 interface ISendMessage {
-  action: 'submitMessage';
+  action: 'sendMessage';
   content: string; // FormDataEntryValue
 }
 
