@@ -13,6 +13,28 @@ interface IJoinRoom {
   room: string;
 }
 
-type UserAction = ISendMessage | ITypingIndication | IJoinRoom;
+interface IJoinDMRoom {
+  action: 'joinDMRoom';
+  room: string;
+}
 
-export type { UserAction, IJoinRoom, ISendMessage, ITypingIndication };
+interface ICreateDMRoom {
+  action: 'createDMRoom';
+  receiver: string;
+}
+
+type UserAction =
+  | ISendMessage
+  | ITypingIndication
+  | IJoinRoom
+  | IJoinDMRoom
+  | ICreateDMRoom;
+
+export type {
+  UserAction,
+  IJoinRoom,
+  ISendMessage,
+  ITypingIndication,
+  IJoinDMRoom,
+  ICreateDMRoom,
+};

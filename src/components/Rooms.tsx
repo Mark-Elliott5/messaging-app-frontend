@@ -1,46 +1,51 @@
 import useWebsocket from 'react-use-websocket';
 import { useState } from 'react';
-import { IBlocked, IDMTab, MessageResponse } from '../types/wsMessageTypes';
-import { IJoinRoom } from '../types/wsActionTypes';
+import { IDMTab, MessageResponse } from '../types/wsMessageTypes';
+import { IJoinDMRoom, IJoinRoom } from '../types/wsActionTypes';
 import DMTab from './DMTab';
+import BuiltInRoom from './BuiltInRoom';
 
 function Rooms({
   room,
   setRoom,
-  setLoggedIn,
+  // setLoggedIn,
 }: {
   room: string;
   setRoom: React.Dispatch<React.SetStateAction<string>>;
-  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  // setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [tabsHistory, setTabsHistory] = useState<Map<string, IDMTab>>(
-    new Map()
-  );
+  const [tabsHistory, setTabsHistory] = useState<
+    Map<string, IDMTab & { newMessage: boolean }>
+  >(new Map());
 
   const { sendMessage } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('room websocket opened'),
-    onClose: (e) => console.log('room websocket closed: ' + e.reason),
     onMessage: (e) => {
       // console.log('room websocket message recieved');
       try {
-        const data: IBlocked | IDMTab = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'blocked') {
-          setLoggedIn(false);
+          // setLoggedIn(false);
+          return;
         }
         if (data.type === 'dmTab') {
-          if (tabsHistory.has(data.sender.username)) {
-            return;
-          }
+          // if (tabsHistory.has(data.sender.username)) {
+          //   return;
+          // }
           const newHistory = new Map(tabsHistory);
-          newHistory.set(data.sender.username, data);
+          newHistory.set(data.sender.username, {
+            ...data,
+            newMessage: data.room !== room ?? true,
+          });
           setTabsHistory(newHistory);
+        }
+        if (data.type === 'joinRoom') {
+          setRoom(data.room);
         }
       } catch (error) {
         console.log(error);
       }
     },
-    onError: () => console.log('room websocket error'),
     retryOnError: true,
     shouldReconnect: (e) => {
       // code 1000 is 'Normal Closure'
@@ -66,9 +71,6 @@ function Rooms({
   });
 
   const handleClick = (currentRoom: string) => {
-    if (room === currentRoom) {
-      return;
-    }
     const data: IJoinRoom = {
       action: 'joinRoom',
       room: currentRoom,
@@ -77,22 +79,25 @@ function Rooms({
     setRoom(currentRoom);
   };
 
-  const handleDMClick = (currentRoom: string) => {
-    if (room === currentRoom) {
+  const handleDMClick = (newRoom: string, senderName: string) => {
+    const newHistory = new Map(tabsHistory);
+    const tabUpdate = newHistory.get(senderName);
+    if (!tabUpdate) {
       return;
     }
-    const data: IJoinRoom = {
-      action: 'joinRoom',
-      room: currentRoom,
+    tabUpdate.newMessage = false;
+    const data: IJoinDMRoom = {
+      action: 'joinDMRoom',
+      room: newRoom,
     };
     sendMessage(JSON.stringify(data));
-    setRoom(currentRoom);
+    setRoom(newRoom);
   };
 
   const tabs = (() => {
     return tabsHistory.size
       ? Array.from(tabsHistory.values()).map((tab) => (
-          <DMTab handleClick={handleDMClick} tab={tab} />
+          <DMTab tab={tab} room={room} handleClick={handleDMClick} />
         ))
       : null;
   })();
@@ -103,22 +108,11 @@ function Rooms({
         <span className='font-bold'>Rooms</span>
       </div>
       <div id='rooms' className='flex flex-col'>
-        <div
-          onClick={() => {
-            handleClick('General');
-          }}
-        >
-          {/* <img src={`${tab.sender.avatar}.png`}></img> */}
-          <span className='inline-block w-full bg-wire-300 pl-2'>General</span>
-        </div>
-        <div
-          onClick={() => {
-            handleClick('Gaming');
-          }}
-        >
-          {/* <img src={`${tab.sender.avatar}.png`}></img> */}
-          <span className='inline-block w-full bg-wire-300 pl-2'>Gaming</span>
-        </div>
+        {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
+          (name) => (
+            <BuiltInRoom name={name} room={room} handleClick={handleClick} />
+          )
+        )}
         <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-500 p-2'>
           <span className='font-bold'>Messages</span>
         </div>

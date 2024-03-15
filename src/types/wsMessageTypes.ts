@@ -1,38 +1,37 @@
-import { Types } from 'mongoose';
+interface IResponseUser {
+  username: string;
+  avatar: number;
+  bio: string;
+}
 
 interface IMessageBase {
   type: 'message';
-  user: {
-    username: string;
-    avatar: number;
-  };
-  date: string; // strigified, needs to be reconstructed with new Date(x)
-}
-
-interface IMessage extends IMessageBase {
-  content: string;
+  user: IResponseUser;
+  date: Date; // will be stringified on frontend
 }
 
 interface IStoredMessage extends IMessageBase {
   content: string | string[];
 }
 
+interface IMessageModel extends IMessage {
+  room: string;
+}
+
+interface IMessage extends IMessageBase {
+  content: string;
+}
+
 interface IDMTab {
   type: 'dmTab';
-  sender: {
-    username: string;
-    avatar: number;
-  };
+  sender: IResponseUser;
   room: string;
 }
 
 interface ITyping {
   type: 'typing';
   typing: boolean;
-  user: {
-    username: string;
-    avatar: number;
-  };
+  user: IResponseUser;
 }
 
 interface IBlocked {
@@ -42,21 +41,22 @@ interface IBlocked {
 
 interface IJoinRoom {
   type: 'joinRoom';
-  users: string[];
+  room: string;
 }
 
-type IUsersOnline = { username: string; avatar: number; bio: string }[];
+interface IRoomUsers {
+  type: 'roomUsers';
+  roomUsers: IResponseUser[]; // sets cannot be stringified, so must be array
+}
 
-interface IUsersOnlineMessage {
+interface IUsersOnline {
   type: 'usersOnline';
-  usersOnline: IUsersOnline;
+  usersOnline: IResponseUser[]; // sets cannot be stringified, so must be array
 }
 
-interface IUser {
-  _id: Types.ObjectId;
-  username: string;
-  bio: string;
-  avatar: number;
+interface IMessageHistory {
+  type: 'messageHistory';
+  messageHistory: IMessageModel[];
 }
 
 type MessageResponse =
@@ -65,17 +65,18 @@ type MessageResponse =
   | ITyping
   | IBlocked
   | IJoinRoom
-  | IUsersOnlineMessage;
+  | IRoomUsers
+  | IUsersOnline
+  | IMessageHistory;
 
 export type {
   ITyping,
   IBlocked,
   IJoinRoom,
   IUsersOnline,
-  IUsersOnlineMessage,
   IMessage,
-  IStoredMessage,
   IDMTab,
-  IUser,
   MessageResponse,
+  IStoredMessage,
+  IResponseUser,
 };

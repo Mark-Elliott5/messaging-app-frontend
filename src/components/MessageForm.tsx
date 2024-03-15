@@ -8,10 +8,7 @@ function MessageForm({ room }: { room: string }) {
   // needs app state room variable to placeholder "Message {room}"
   const { sendMessage, readyState } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('MessageForm websocket opened'),
     onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
-    // onMessage: () => console.log('MessageForm websocket message'),
-    onError: () => console.log('MessageForm websocket error'),
     retryOnError: true,
     shouldReconnect: (e) => {
       // code 1000 is "Normal Closure"

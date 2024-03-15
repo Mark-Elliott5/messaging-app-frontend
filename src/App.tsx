@@ -32,7 +32,7 @@ function App() {
   return loggedIn ? (
     <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
       <div id='rooms-and-profile' className='bg-wire-600'>
-        <Rooms room={room} setRoom={setRoom} setLoggedIn={setLoggedIn} />
+        <Rooms room={room} setRoom={setRoom} />
         <div id='profile'></div>
       </div>
       <div
@@ -40,10 +40,10 @@ function App() {
         className='z-10 flex flex-col bg-wire-500 shadow-x'
       >
         <MessageList room={room} />
-        <TypingIndicator />
+        <TypingIndicator room={room} />
         <MessageForm room={room} />
       </div>
-      <UsersOnline setRoom={setRoom} />
+      <UsersOnline room={room} />
     </div>
   ) : (
     <LoginPage setLoggedIn={setLoggedIn} />

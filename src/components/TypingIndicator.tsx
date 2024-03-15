@@ -1,22 +1,16 @@
 import AnimatedEllipses from './AnimatedEllipses';
 import useWebsocket from 'react-use-websocket';
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
-import { useState } from 'react';
-import { ITyping, MessageResponse } from '../types/wsMessageTypes';
+import { useEffect, useState } from 'react';
+import { MessageResponse } from '../types/wsMessageTypes';
 
-function TypingIndicator() {
+function TypingIndicator({ room }: { room: string }) {
   const [typers, setTypers] = useState<Set<string>>(new Set());
   const { readyState } = useWebsocket('ws://localhost:3000/chat', {
     share: true, // Shares ws connection to same URL between components
-    onOpen: () => console.log('Typing indicator websocket opened'),
-    onClose: (e) =>
-      console.log('Typing indicator websocket closed: ' + e.reason),
     onMessage: (e) => {
       try {
-        if (!e.data) {
-          return;
-        }
-        const data: ITyping = JSON.parse(e.data);
+        const data: MessageResponse = JSON.parse(e.data);
         if (data.type === 'typing') {
           const newTypers = new Set(typers);
           data.typing
@@ -28,7 +22,6 @@ function TypingIndicator() {
         console.log(err);
       }
     },
-    onError: () => console.log('Typing indicator websocket error'),
     retryOnError: true,
     shouldReconnect: (e) => {
       // code 1000 is 'Normal Closure'
@@ -67,6 +60,8 @@ function TypingIndicator() {
     }
     return `${names[0]} is typing`;
   })();
+
+  useEffect(() => setTypers(new Set()), [room]);
 
   return (
     <div className='h-5'>
