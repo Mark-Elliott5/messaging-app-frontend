@@ -7,7 +7,7 @@ interface IResponseUser {
 interface IMessageBase {
   type: 'message';
   user: IResponseUser;
-  date: Date; // will be stringified on frontend
+  date: string; // will be stringified on frontend, needs new Date() constructor
 }
 
 interface IContentMessage extends IMessageBase {

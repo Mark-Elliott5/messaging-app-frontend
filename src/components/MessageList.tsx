@@ -18,7 +18,10 @@ function MessageList({ room }: { room: string }) {
           const { user } = data;
           const latestMessage = messageHistory[messageHistory.length - 1];
           const latestUser = latestMessage?.user.username;
-          if (user.username !== latestUser) {
+          const timeElapsed =
+            new Date(data.date).getTime() -
+            new Date(latestMessage.date).getTime();
+          if (user.username !== latestUser || timeElapsed > 300000) {
             return setMessageHistory((prevState) => [...prevState, data]);
           }
           const newHistory = Array.from(messageHistory);
@@ -40,19 +43,27 @@ function MessageList({ room }: { room: string }) {
           if (!data.messageHistory.length) {
             return;
           }
+          data.messageHistory.reverse();
           const history = data.messageHistory.reduce(
             (newArr: IStoredMessage[], cur, i) => {
               const prevMessage = newArr[newArr.length - 1];
               if (i === 0 || prevMessage.user.username !== cur.user.username) {
                 newArr.push(cur);
-              } else {
-                if (typeof prevMessage.content === 'string') {
-                  const newContent = [prevMessage.content, cur.content];
-                  prevMessage.content = newContent;
-                } else {
-                  prevMessage.content.push(cur.content);
-                }
+                return newArr;
               }
+              const timeElapsed =
+                new Date(cur.date).getTime() -
+                new Date(prevMessage.date).getTime();
+              if (timeElapsed > 300000) {
+                newArr.push(cur);
+                return newArr;
+              }
+              if (typeof prevMessage.content === 'string') {
+                const newContent = [prevMessage.content, cur.content];
+                prevMessage.content = newContent;
+                return newArr;
+              }
+              prevMessage.content.push(cur.content);
               return newArr;
             },
             []
