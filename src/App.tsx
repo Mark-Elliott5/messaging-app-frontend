@@ -33,7 +33,7 @@ function App() {
     <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
       <div id='rooms-and-profile' className='bg-wire-600'>
         <Rooms room={room} setRoom={setRoom} />
-        <div id='profile'></div>
+        <div id='profile-tab'></div>
       </div>
       <div
         id='middle-column'
