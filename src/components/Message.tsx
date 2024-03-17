@@ -15,7 +15,7 @@ function Message({ message }: { message: IStoredMessage }) {
   return (
     <div className='flex gap-2 py-1 pl-3 pr-8 hover:bg-wire-400'>
       <img
-        className='inline-block h-9 flex-[0_1_0%]'
+        className='inline-block h-12 flex-[0_1_0%]'
         src={`${message.user?.avatar}.png`}
       ></img>
       <div className=''>

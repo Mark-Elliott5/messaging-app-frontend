@@ -10,16 +10,21 @@ interface IMessageBase {
   date: Date; // will be stringified on frontend
 }
 
+interface IContentMessage extends IMessageBase {
+  content: string;
+}
+
 interface IStoredMessage extends IMessageBase {
   content: string | string[];
 }
 
-interface IMessageModel extends IMessage {
-  room: string;
-}
+// interface IMessageModel extends IMessage {
+//   room: string;
+// }
 
-interface IMessage extends IMessageBase {
-  content: string;
+interface IMessageHistory {
+  type: 'messageHistory';
+  messageHistory: IContentMessage[];
 }
 
 interface IDMTab {
@@ -54,13 +59,8 @@ interface IUsersOnline {
   usersOnline: IResponseUser[]; // sets cannot be stringified, so must be array
 }
 
-interface IMessageHistory {
-  type: 'messageHistory';
-  messageHistory: IMessageModel[];
-}
-
 type MessageResponse =
-  | IMessage
+  | IContentMessage
   | IDMTab
   | ITyping
   | IBlocked
@@ -74,7 +74,7 @@ export type {
   IBlocked,
   IJoinRoom,
   IUsersOnline,
-  IMessage,
+  IContentMessage,
   IDMTab,
   MessageResponse,
   IStoredMessage,

@@ -36,6 +36,29 @@ function MessageList({ room }: { room: string }) {
           newHistory.push(newMessage);
           return setMessageHistory(newHistory);
         }
+        if (data.type === 'messageHistory') {
+          if (!data.messageHistory.length) {
+            return;
+          }
+          const history = data.messageHistory.reduce(
+            (newArr: IStoredMessage[], cur, i) => {
+              const prevMessage = newArr[newArr.length - 1];
+              if (i === 0 || prevMessage.user.username !== cur.user.username) {
+                newArr.push(cur);
+              } else {
+                if (typeof prevMessage.content === 'string') {
+                  const newContent = [prevMessage.content, cur.content];
+                  prevMessage.content = newContent;
+                } else {
+                  prevMessage.content.push(cur.content);
+                }
+              }
+              return newArr;
+            },
+            []
+          );
+          setMessageHistory(history);
+        }
       } catch (err) {
         console.log(err);
       }
