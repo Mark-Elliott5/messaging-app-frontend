@@ -18,10 +18,6 @@ interface IStoredMessage extends IMessageBase {
   content: string | string[];
 }
 
-// interface IMessageModel extends IMessage {
-//   room: string;
-// }
-
 interface IMessageHistory {
   type: 'messageHistory';
   messageHistory: IContentMessage[];
@@ -59,6 +55,11 @@ interface IUsersOnline {
   usersOnline: IResponseUser[]; // sets cannot be stringified, so must be array
 }
 
+interface IProfile {
+  type: 'profile';
+  profile: IResponseUser;
+}
+
 type MessageResponse =
   | IContentMessage
   | IDMTab
@@ -67,7 +68,8 @@ type MessageResponse =
   | IJoinRoom
   | IRoomUsers
   | IUsersOnline
-  | IMessageHistory;
+  | IMessageHistory
+  | IProfile;
 
 export type {
   ITyping,

@@ -28,6 +28,7 @@ function User({
           <>
             <button
               type='button'
+              className='block'
               onClick={(e) => {
                 e.stopPropagation();
                 handleClick(user.username);
@@ -37,6 +38,7 @@ function User({
             </button>
             <button
               type='button'
+              className='block'
               onClick={(e) => {
                 e.stopPropagation();
                 setProfileVisible(true);

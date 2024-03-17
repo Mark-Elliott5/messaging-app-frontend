@@ -93,7 +93,7 @@ function LoginPage({
         className='rounded-md bg-wire-400 px-2 py-1 text-center placeholder-wire-50 outline-none placeholder:text-center placeholder:italic'
       />
       <input
-        type='text'
+        type='password'
         name='password'
         placeholder='Password'
         minLength={1}
@@ -158,7 +158,7 @@ function LoginPage({
         className='rounded-md bg-wire-400 px-2 py-1 text-center placeholder-wire-50 outline-none placeholder:text-center placeholder:italic'
       />
       <input
-        type='text'
+        type='password'
         name='password'
         placeholder='Password'
         minLength={1}

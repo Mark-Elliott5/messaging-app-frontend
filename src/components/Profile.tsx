@@ -7,11 +7,11 @@ function Profile({
 }) {
   return (
     <div
-      className='absolute z-10 h-dvh w-dvw'
+      className='fixed left-0 top-0 z-20 h-dvh w-dvw'
       onClick={() => setProfileVisible(false)}
     >
       <div
-        className='fixed left-1/2 top-1/2 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-wire-600 p-4'
+        className='fixed left-1/2 top-1/2 h-2/3 w-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-wire-600 p-4 shadow-md'
         onClick={(e) => e.stopPropagation()}
       >
         <div>

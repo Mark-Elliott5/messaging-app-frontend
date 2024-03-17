@@ -85,6 +85,7 @@ function MessageForm({ room }: { room: string }) {
             }
           }}
           minLength={1}
+          cacheMeasurements={true}
           className='flex-1 resize-none rounded-md bg-wire-400 px-2 placeholder-wire-50 outline-none placeholder:italic'
         />
         <button id='send-message' type='submit' className='hidden' />

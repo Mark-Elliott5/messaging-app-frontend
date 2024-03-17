@@ -18,6 +18,9 @@ function MessageList({ room }: { room: string }) {
           const { user } = data;
           const latestMessage = messageHistory[messageHistory.length - 1];
           const latestUser = latestMessage?.user.username;
+          if (!latestMessage || !latestUser) {
+            return setMessageHistory((prevState) => [...prevState, data]);
+          }
           const timeElapsed =
             new Date(data.date).getTime() -
             new Date(latestMessage.date).getTime();
@@ -135,7 +138,7 @@ function MessageList({ room }: { room: string }) {
 
   return (
     <>
-      <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-400 p-2'>
+      <div className='sticky top-0 flex w-full items-center gap-2 bg-wire-400 p-2'>
         <span
           className={`h-3 w-3 ${connectionStatusClasses} rounded-full border-1`}
         />

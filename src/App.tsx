@@ -6,6 +6,7 @@ import MessageList from './components/MessageList';
 import TypingIndicator from './components/TypingIndicator';
 import MessageForm from './components/MessageForm';
 import './app.css';
+import ProfileTab from './components/ProfileTab';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -31,9 +32,12 @@ function App() {
 
   return loggedIn ? (
     <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
-      <div id='rooms-and-profile' className='bg-wire-600'>
+      <div
+        id='rooms-and-profile'
+        className='flex flex-col justify-between bg-wire-600'
+      >
         <Rooms room={room} setRoom={setRoom} />
-        <div id='profile-tab'></div>
+        <ProfileTab />
       </div>
       <div
         id='middle-column'

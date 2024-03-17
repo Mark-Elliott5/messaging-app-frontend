@@ -103,26 +103,24 @@ function Rooms({
   })();
 
   return (
-    <>
-      <div className='flex w-full items-center gap-2 bg-wire-500 p-2'>
-        <span className='font-bold'>Rooms</span>
-      </div>
+    <div className='bg-wire-500'>
+      <p className='p-2 font-bold'>Rooms</p>
       <div id='rooms' className='flex flex-col'>
         {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
           (name) => (
             <BuiltInRoom name={name} room={room} handleClick={handleClick} />
           )
         )}
-        <div className='sticky top-0 z-10 flex w-full items-center gap-2 bg-wire-500 p-2'>
-          <span className='font-bold'>Messages</span>
+        <div className='bg-wire-500'>
+          <p className='p-2 font-bold'>Messages</p>
         </div>
-        {tabs?.length ? (
-          tabs
-        ) : (
-          <p className='text-center italic'>No DMs yet!</p>
-        )}
       </div>
-    </>
+      {tabs?.length ? (
+        tabs
+      ) : (
+        <p className='bg-wire-600 text-center italic'>No DMs yet!</p>
+      )}
+    </div>
   );
 }
 
