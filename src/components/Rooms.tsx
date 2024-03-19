@@ -59,7 +59,7 @@ function Rooms({
     filter: (e) => {
       try {
         const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'dmTab') {
+        if (data.type === 'dmTab' || data.type === 'joinRoom') {
           return true;
         }
         return false;
