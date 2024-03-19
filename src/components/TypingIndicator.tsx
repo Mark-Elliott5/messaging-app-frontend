@@ -6,45 +6,48 @@ import { MessageResponse } from '../types/wsMessageTypes';
 
 function TypingIndicator({ room }: { room: string }) {
   const [typers, setTypers] = useState<Set<string>>(new Set());
-  const { readyState } = useWebsocket('ws://localhost:3000/chat', {
-    share: true, // Shares ws connection to same URL between components
-    onMessage: (e) => {
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'typing') {
-          const newTypers = new Set(typers);
-          data.typing
-            ? newTypers.add(data.user.username)
-            : newTypers.delete(data.user.username);
-          setTypers(newTypers);
+  const { readyState } = useWebsocket(
+    `wss://${window.location.hostname}/chat`,
+    {
+      share: true, // Shares ws connection to same URL between components
+      onMessage: (e) => {
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'typing') {
+            const newTypers = new Set(typers);
+            data.typing
+              ? newTypers.add(data.user.username)
+              : newTypers.delete(data.user.username);
+            setTypers(newTypers);
+          }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is 'Normal Closure'
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?
-    filter: (e) => {
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'typing') {
+      },
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is 'Normal Closure'
+        if (e.code !== 1000) {
           return true;
         }
         return false;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-  });
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?
+      filter: (e) => {
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'typing') {
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      },
+    }
+  );
 
   const usersTyping = (() => {
     // check that connection is open and typing property exists

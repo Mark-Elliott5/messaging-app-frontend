@@ -18,57 +18,60 @@ function Rooms({
     Map<string, IDMTabMessage & { newMessage: boolean }>
   >(new Map());
 
-  const { sendMessage } = useWebsocket('ws://localhost:3000/chat', {
-    share: true, // Shares ws connection to same URL between components
-    onMessage: (e) => {
-      // console.log('room websocket message recieved');
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'blocked') {
-          // setLoggedIn(false);
-          return;
+  const { sendMessage } = useWebsocket(
+    `wss://${window.location.hostname}/chat`,
+    {
+      share: true, // Shares ws connection to same URL between components
+      onMessage: (e) => {
+        // console.log('room websocket message recieved');
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'blocked') {
+            // setLoggedIn(false);
+            return;
+          }
+          if (data.type === 'dmTab') {
+            if (tabsHistory.has(data.sender.username)) {
+              return;
+            }
+            const newHistory = new Map(tabsHistory);
+            newHistory.set(data.sender.username, {
+              ...data,
+              newMessage: data.room !== room,
+            });
+            setTabsHistory(newHistory);
+          }
+          if (data.type === 'joinRoom') {
+            setRoom(data.room);
+          }
+        } catch (error) {
+          console.log(error);
         }
-        if (data.type === 'dmTab') {
-          // if (tabsHistory.has(data.sender.username)) {
-          //   return;
-          // }
-          const newHistory = new Map(tabsHistory);
-          newHistory.set(data.sender.username, {
-            ...data,
-            newMessage: data.room !== room,
-          });
-          setTabsHistory(newHistory);
-        }
-        if (data.type === 'joinRoom') {
-          setRoom(data.room);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is 'Normal Closure'
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?,
-    filter: (e) => {
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'dmTab' || data.type === 'joinRoom') {
+      },
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is 'Normal Closure'
+        if (e.code !== 1000) {
           return true;
         }
         return false;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-  });
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?,
+      filter: (e) => {
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'dmTab' || data.type === 'joinRoom') {
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      },
+    }
+  );
 
   const handleClick = (currentRoom: string) => {
     const data: IJoinRoom = {

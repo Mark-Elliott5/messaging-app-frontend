@@ -8,42 +8,45 @@ function ProfileTab() {
   const [user, setUser] = useState<IResponseUser | undefined>(undefined);
   const [editorVisible, setEditorVisible] = useState(false);
 
-  const { sendMessage } = useWebsocket('ws://localhost:3000/chat', {
-    share: true, // Shares ws connection to same URL between components
-    onMessage: (e) => {
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'profile') {
-          setEditorVisible(false);
-          setUser(data.profile);
+  const { sendMessage } = useWebsocket(
+    `wss://${window.location.hostname}/chat`,
+    {
+      share: true, // Shares ws connection to same URL between components
+      onMessage: (e) => {
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'profile') {
+            setEditorVisible(false);
+            setUser(data.profile);
+          }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is 'Normal Closure'
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000,
-    filter: (e) => {
-      try {
-        const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'profile') {
+      },
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is 'Normal Closure'
+        if (e.code !== 1000) {
           return true;
         }
         return false;
-      } catch (err) {
-        console.log(err);
-        return false;
-      }
-    },
-  });
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000,
+      filter: (e) => {
+        try {
+          const data: MessageResponse = JSON.parse(e.data);
+          if (data.type === 'profile') {
+            return true;
+          }
+          return false;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      },
+    }
+  );
 
   const handleSendMessage = (avatar: number, bio: string) => {
     if (avatar > 13) {

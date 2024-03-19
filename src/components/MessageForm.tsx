@@ -6,21 +6,24 @@ import { useEffect, useRef } from 'react';
 
 function MessageForm({ room }: { room: string }) {
   // needs app state room variable to placeholder "Message {room}"
-  const { sendMessage, readyState } = useWebsocket('ws://localhost:3000/chat', {
-    share: true, // Shares ws connection to same URL between components
-    onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
-    retryOnError: true,
-    shouldReconnect: (e) => {
-      // code 1000 is "Normal Closure"
-      if (e.code !== 1000) {
-        return true;
-      }
-      return false;
-    },
-    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-    reconnectInterval: 3000, // Milliseconds?,
-    filter: () => false,
-  });
+  const { sendMessage, readyState } = useWebsocket(
+    `wss://${window.location.hostname}/chat`,
+    {
+      share: true, // Shares ws connection to same URL between components
+      onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
+      retryOnError: true,
+      shouldReconnect: (e) => {
+        // code 1000 is "Normal Closure"
+        if (e.code !== 1000) {
+          return true;
+        }
+        return false;
+      },
+      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+      reconnectInterval: 3000, // Milliseconds?,
+      filter: () => false,
+    }
+  );
 
   const lastTypingSent = useRef(false);
 

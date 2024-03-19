@@ -11,7 +11,7 @@ function Profile({
       onClick={() => setProfileVisible(false)}
     >
       <div
-        className='fixed left-1/2 top-1/2 h-2/3 w-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-wire-600 p-6 shadow-lg'
+        className='fixed left-1/2 top-1/2 h-2/3 w-2/3 -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-wire-700 p-6 shadow-lg'
         onClick={(e) => e.stopPropagation()}
       >
         <div className='mb-4 flex items-center gap-4'>

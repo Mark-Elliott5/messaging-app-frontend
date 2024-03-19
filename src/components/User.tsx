@@ -28,7 +28,7 @@ function User({
           <>
             <button
               type='button'
-              className='block'
+              className='mt-1 block hover:bg-wire-400'
               onClick={(e) => {
                 e.stopPropagation();
                 handleClick(user.username);
@@ -38,7 +38,7 @@ function User({
             </button>
             <button
               type='button'
-              className='block'
+              className='block hover:bg-wire-400'
               onClick={(e) => {
                 e.stopPropagation();
                 setProfileVisible(true);
