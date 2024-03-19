@@ -1,30 +1,15 @@
-# React + TypeScript + Vite
+Site is currently deployed [here](https://messaging-app-uz05.onrender.com).
+Monorepo located [here](https://github.com/Mark-Elliott5/messaging-app).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This messaging-app-frontend project features:
 
-Currently, two official plugins are available:
+- Typescript
+- A React SPA frontend for an online chatroom using websockets
+- RESTful API consumption via Axios
+- Tailwind
+- Vite
+- Framer Motion
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This frontend is to be used with my messaging-app-backend repository. Navigate to the monorepo linked above for more information.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+![messaging-app-backend](images/messaging-app.png)

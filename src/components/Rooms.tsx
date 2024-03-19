@@ -31,9 +31,9 @@ function Rooms({
             return;
           }
           if (data.type === 'dmTab') {
-            if (tabsHistory.has(data.sender.username)) {
-              return;
-            }
+            // if (tabsHistory.has(data.sender.username)) {
+            //   return;
+            // }
             const newHistory = new Map(tabsHistory);
             newHistory.set(data.sender.username, {
               ...data,
