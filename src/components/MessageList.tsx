@@ -1,5 +1,9 @@
 import useWebsocket from 'react-use-websocket';
-import { IStoredMessage, MessageResponse } from '../types/wsMessageTypes';
+import {
+  IResponseUser,
+  IStoredMessage,
+  MessageResponse,
+} from '../types/wsMessageTypes';
 import { useEffect, useState } from 'react';
 import Message from './Message';
 
@@ -73,6 +77,25 @@ function MessageList({ room }: { room: string }) {
           );
           setMessageHistory(history);
         }
+        if (data.type === 'usersOnline') {
+          if (!messageHistory.length) {
+            return;
+          }
+          const newUsers: Map<string, IResponseUser> = new Map();
+          for (const user of data.usersOnline) {
+            newUsers.set(user.username, user);
+          }
+          const newHistory = Array.from(messageHistory);
+          for (let i = 0; i < newHistory.length; i++) {
+            const userUpdated = newUsers.get(newHistory[i].user.username);
+            if (!userUpdated) {
+              continue;
+            }
+            newHistory[i].user.avatar = userUpdated.avatar;
+            newHistory[i].user.bio = userUpdated.bio;
+          }
+          setMessageHistory(newHistory);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -101,7 +124,11 @@ function MessageList({ room }: { room: string }) {
       console.log(e);
       try {
         const data: MessageResponse = JSON.parse(e.data);
-        if (data.type === 'message') {
+        if (
+          data.type === 'message' ||
+          data.type === 'messageHistory' ||
+          data.type === 'usersOnline'
+        ) {
           return true;
         }
         return false;
@@ -116,7 +143,12 @@ function MessageList({ room }: { room: string }) {
     return messageHistory.length
       ? messageHistory
           .toReversed()
-          .map((message) => <Message message={message} />)
+          .map((message) => (
+            <Message
+              key={`${message.date}${message.content}${message.user.username}`}
+              message={message}
+            />
+          ))
       : null;
   })();
 

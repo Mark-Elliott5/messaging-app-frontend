@@ -18,66 +18,71 @@ interface IStoredMessage extends IMessageBase {
   content: string | string[];
 }
 
-interface IMessageHistory {
+interface IMessageHistoryMessage {
   type: 'messageHistory';
   messageHistory: IContentMessage[];
 }
 
-interface IDMTab {
+interface IDMTabMessage {
   type: 'dmTab';
   sender: IResponseUser;
   room: string;
 }
 
-interface ITyping {
+interface ITypingMessage {
   type: 'typing';
   typing: boolean;
   user: IResponseUser;
 }
 
-interface IBlocked {
+interface IBlockedMessage {
   type: 'blocked';
   message: string;
 }
 
-interface IJoinRoom {
+interface IJoinRoomMessage {
   type: 'joinRoom';
   room: string;
 }
 
-interface IRoomUsers {
+interface IRoomUsersMessage {
   type: 'roomUsers';
   roomUsers: IResponseUser[]; // sets cannot be stringified, so must be array
 }
 
-interface IUsersOnline {
+interface IUsersOnlineMessage {
   type: 'usersOnline';
   usersOnline: IResponseUser[]; // sets cannot be stringified, so must be array
 }
 
-interface IProfile {
+interface IProfileMessage {
   type: 'profile';
   profile: IResponseUser;
 }
 
+interface ILoggedOutMessage {
+  type: 'loggedOut';
+}
+
 type MessageResponse =
   | IContentMessage
-  | IDMTab
-  | ITyping
-  | IBlocked
-  | IJoinRoom
-  | IRoomUsers
-  | IUsersOnline
-  | IMessageHistory
-  | IProfile;
+  | IDMTabMessage
+  | ITypingMessage
+  | IBlockedMessage
+  | IJoinRoomMessage
+  | IRoomUsersMessage
+  | IUsersOnlineMessage
+  | IMessageHistoryMessage
+  | IProfileMessage
+  | ILoggedOutMessage;
 
 export type {
-  ITyping,
-  IBlocked,
-  IJoinRoom,
-  IUsersOnline,
+  ITypingMessage,
+  IBlockedMessage,
+  IJoinRoomMessage,
+  IUsersOnlineMessage,
   IContentMessage,
-  IDMTab,
+  IDMTabMessage,
   MessageResponse,
   IStoredMessage,
   IResponseUser,

@@ -47,7 +47,7 @@ function App() {
         <TypingIndicator room={room} />
         <MessageForm room={room} />
       </div>
-      <UsersOnline room={room} />
+      <UsersOnline setLoggedIn={setLoggedIn} room={room} />
     </div>
   ) : (
     <LoginPage setLoggedIn={setLoggedIn} />

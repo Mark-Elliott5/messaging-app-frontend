@@ -73,6 +73,7 @@ function MessageForm({ room }: { room: string }) {
     <div id='message-input' className='flex flex-col'>
       <div className='mx-2 my-2 flex items-center justify-center rounded-md bg-wire-400 px-2 py-1'>
         <TextareaAutosize
+          maxLength={900}
           maxRows={3}
           name='content'
           id='messsage-content'

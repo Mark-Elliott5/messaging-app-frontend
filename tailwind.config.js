@@ -20,7 +20,7 @@ export default {
       },
       height: {
         unset: 'unset',
-        // 13: '3.25rem',
+        13: '3.25rem',
       },
       colors: {
         'ebony-clay': {

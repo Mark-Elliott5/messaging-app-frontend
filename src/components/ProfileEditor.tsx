@@ -43,6 +43,7 @@ function ProfileEditor({
           </div>
           <p>Bio</p>
           <TextareaAutosize
+            maxLength={900}
             minRows={3}
             maxRows={6}
             name='content'
@@ -50,7 +51,6 @@ function ProfileEditor({
             placeholder='Enter a bio'
             onChange={(e) => setBioField(e.currentTarget.value)}
             minLength={1}
-            maxLength={900}
             cacheMeasurements={true}
             className='w-full flex-1 resize-none rounded-md bg-wire-400 p-2 placeholder-wire-50 outline-none placeholder:italic'
           >

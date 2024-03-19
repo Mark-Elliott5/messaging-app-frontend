@@ -31,13 +31,18 @@ interface IUpdateProfile {
   };
 }
 
+interface ILogout {
+  action: 'logout';
+}
+
 type UserAction =
   | ISendMessage
   | ITypingIndication
   | IJoinRoom
   | IJoinDMRoom
   | ICreateDMRoom
-  | IUpdateProfile;
+  | IUpdateProfile
+  | ILogout;
 
 export type {
   UserAction,
@@ -47,4 +52,5 @@ export type {
   IJoinDMRoom,
   ICreateDMRoom,
   IUpdateProfile,
+  ILogout,
 };

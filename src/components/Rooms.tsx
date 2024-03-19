@@ -1,6 +1,6 @@
 import useWebsocket from 'react-use-websocket';
 import { useState } from 'react';
-import { IDMTab, MessageResponse } from '../types/wsMessageTypes';
+import { IDMTabMessage, MessageResponse } from '../types/wsMessageTypes';
 import { IJoinDMRoom, IJoinRoom } from '../types/wsActionTypes';
 import DMTab from './DMTab';
 import BuiltInRoom from './BuiltInRoom';
@@ -15,7 +15,7 @@ function Rooms({
   // setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [tabsHistory, setTabsHistory] = useState<
-    Map<string, IDMTab & { newMessage: boolean }>
+    Map<string, IDMTabMessage & { newMessage: boolean }>
   >(new Map());
 
   const { sendMessage } = useWebsocket('ws://localhost:3000/chat', {
@@ -35,7 +35,7 @@ function Rooms({
           const newHistory = new Map(tabsHistory);
           newHistory.set(data.sender.username, {
             ...data,
-            newMessage: data.room !== room ?? true,
+            newMessage: data.room !== room,
           });
           setTabsHistory(newHistory);
         }
@@ -97,7 +97,12 @@ function Rooms({
   const tabs = (() => {
     return tabsHistory.size
       ? Array.from(tabsHistory.values()).map((tab) => (
-          <DMTab tab={tab} room={room} handleClick={handleDMClick} />
+          <DMTab
+            key={tab.sender.username}
+            tab={tab}
+            room={room}
+            handleDMClick={handleDMClick}
+          />
         ))
       : null;
   })();
@@ -108,7 +113,12 @@ function Rooms({
       <div id='rooms' className='flex flex-col'>
         {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
           (name) => (
-            <BuiltInRoom name={name} room={room} handleClick={handleClick} />
+            <BuiltInRoom
+              key={name}
+              name={name}
+              room={room}
+              handleClick={handleClick}
+            />
           )
         )}
         <div className='bg-wire-500'>
