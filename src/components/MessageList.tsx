@@ -6,14 +6,12 @@ import {
 } from '../types/wsMessageTypes';
 import { useEffect, useState } from 'react';
 import Message from './Message';
+import { LayoutGroup } from 'framer-motion';
 
 function MessageList({ room }: { room: string }) {
-  // needs room id inherited from state to supply to first websocket hook arg
-  const [loading] = useState(false);
   const [messageHistory, setMessageHistory] = useState<IStoredMessage[]>([]);
-  // const messageBuffer = useRef<IMessage[]>([]);
 
-  const { readyState } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { readyState } = useWebsocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -180,13 +178,13 @@ function MessageList({ room }: { room: string }) {
         id='messages'
         className='flex h-dvh flex-[1_1_0] flex-col-reverse overflow-y-scroll'
       >
-        {messages?.length ? (
-          messages
-        ) : loading ? (
-          <p className='text-center italic'>Loading...</p>
-        ) : (
-          <p className='text-center italic'>No messages yet!</p>
-        )}
+        <LayoutGroup key={'messageLayout'}>
+          {messages ? (
+            messages
+          ) : (
+            <p className='text-center italic'>No messages yet!</p>
+          )}
+        </LayoutGroup>
       </div>
     </>
   );

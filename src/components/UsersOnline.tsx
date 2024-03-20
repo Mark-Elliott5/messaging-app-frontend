@@ -16,7 +16,7 @@ function UsersOnline({
   const [usersOnline, setUsersOnline] = useState<IResponseUser[]>([]);
   const [roomUsers, setRoomUsers] = useState<IResponseUser[]>([]);
 
-  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebsocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('usersOnline websocket message recieved');
@@ -105,7 +105,7 @@ function UsersOnline({
   };
 
   return (
-    <div className='flex flex-col items-center justify-between gap-4 rounded-xl'>
+    <>
       <div className='flex h-full w-full flex-col gap-4'>
         <LayoutGroup key={'layoutRightColumn'}>
           <motion.div
@@ -113,7 +113,7 @@ function UsersOnline({
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='shadow-wire max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600'
+            className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutUsersOnline'}>
               <motion.p
@@ -147,7 +147,7 @@ function UsersOnline({
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='shadow-wire max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600'
+            className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutRoomUsers'}>
               <motion.p
@@ -179,7 +179,7 @@ function UsersOnline({
         </LayoutGroup>
       </div>
       <LogoutButton handleLogout={handleLogout} />
-    </div>
+    </>
   );
 }
 

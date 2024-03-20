@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IStoredMessage } from '../types/wsMessageTypes';
 import Profile from './Profile';
+import { motion } from 'framer-motion';
 
 function Message({ message }: { message: IStoredMessage }) {
   const [profileVisible, setProfileVisible] = useState(false);
@@ -14,7 +15,14 @@ function Message({ message }: { message: IStoredMessage }) {
   })();
 
   return (
-    <div className='my-1 flex gap-2 py-1 pl-3 pr-8 hover:bg-wire-400'>
+    <motion.div
+      layout
+      transition={{
+        ease: 'linear',
+        duration: 0.2,
+      }}
+      className='my-1 flex gap-2 py-1 pl-3 pr-8 hover:bg-wire-400'
+    >
       <img
         className='inline-block h-12 flex-[0_1_0%] cursor-pointer'
         src={`${message.user?.avatar}.png`}
@@ -32,7 +40,7 @@ function Message({ message }: { message: IStoredMessage }) {
       {profileVisible && (
         <Profile user={message.user} setProfileVisible={setProfileVisible} />
       )}
-    </div>
+    </motion.div>
   );
 }
 

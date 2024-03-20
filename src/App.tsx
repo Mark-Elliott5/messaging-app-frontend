@@ -9,7 +9,7 @@ import './app.css';
 import ProfileTab from './components/ProfileTab';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [room, setRoom] = useState<string>('General');
 
   useEffect(() => {
@@ -31,20 +31,25 @@ function App() {
   }, []);
 
   return loggedIn ? (
-    <div className='grid h-dvh w-dvw grid-cols-131 gap-4 overflow-hidden bg-wire-700 p-4 font-inter'>
-      <div id='rooms-and-profile' className='flex flex-col gap-4 rounded-md'>
+    <div className='grid h-dvh w-dvw grid-cols-2 grid-rows-2 gap-4 overflow-hidden bg-wire-700 p-4 font-inter md:grid-cols-131 md:grid-rows-none'>
+      <div
+        id='rooms-and-profile'
+        className='col-span-1 col-start-1 row-start-2 flex flex-col gap-4 rounded-md md:col-start-1 md:row-start-1'
+      >
         <Rooms room={room} setRoom={setRoom} />
         <ProfileTab />
       </div>
       <div
         id='middle-column'
-        className='shadow-wire flex flex-col rounded-md bg-wire-500'
+        className='col-span-2 row-start-1 flex flex-col rounded-md bg-wire-500 shadow-wire md:col-span-1 md:col-start-2'
       >
         <MessageList room={room} />
         <TypingIndicator room={room} />
         <MessageForm room={room} />
       </div>
-      <UsersOnline setLoggedIn={setLoggedIn} room={room} />
+      <div className='col-span-1 col-start-2 row-start-2 flex flex-col items-center justify-between gap-4 overflow-y-scroll rounded-xl md:col-start-3 md:row-start-1'>
+        <UsersOnline setLoggedIn={setLoggedIn} room={room} />
+      </div>
     </div>
   ) : (
     <LoginPage setLoggedIn={setLoggedIn} />

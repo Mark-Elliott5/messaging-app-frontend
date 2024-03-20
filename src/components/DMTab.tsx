@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { IDMTabMessage } from '../types/wsMessageTypes';
 
 function DMTab({
@@ -10,7 +11,15 @@ function DMTab({
   handleDMClick: (newRoom: string, senderName: string) => void;
 }) {
   return (
-    <div
+    <motion.div
+      layout
+      animate={{
+        transition: { duration: 0.3, ease: 'easeInOut' },
+        opacity: 1,
+        y: 0,
+      }}
+      initial={{ opacity: 0, y: -16 }}
+      exit={{ opacity: 0 }}
       className={`flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-wire-400 ${room === tab.room ? 'bg-wire-300' : 'bg-wire-500'} m-3 rounded-md`}
       onClick={() => {
         if (room === tab.room) return;
@@ -27,7 +36,7 @@ function DMTab({
       <span
         className={`en h-3 w-3 ${tab.newMessage && room !== tab.room && 'border-1 border-green-500 bg-green-400'} rounded-full`}
       />
-    </div>
+    </motion.div>
   );
 }
 

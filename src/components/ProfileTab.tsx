@@ -8,7 +8,7 @@ function ProfileTab() {
   const [user, setUser] = useState<IResponseUser | undefined>(undefined);
   const [editorVisible, setEditorVisible] = useState(false);
 
-  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebsocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -66,7 +66,7 @@ function ProfileTab() {
     <>
       <div
         id='profile-tab'
-        className='shadow-wire flex cursor-pointer items-center justify-between rounded-md bg-wire-400 p-2'
+        className='flex cursor-pointer items-center justify-between rounded-md bg-wire-400 p-2 shadow-wire'
         onClick={() => setEditorVisible(!editorVisible)}
       >
         <div className=''>
