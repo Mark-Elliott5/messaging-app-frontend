@@ -20,7 +20,7 @@ function Message({ message }: { message: IStoredMessage }) {
         src={`${message.user?.avatar}.png`}
         onClick={() => setProfileVisible(true)}
       ></img>
-      <div className=''>
+      <div className='ml-1'>
         <div className='flex items-center gap-2'>
           <span className=''>{message.user?.username}</span>
           <span className='text-xs text-wire-50'>

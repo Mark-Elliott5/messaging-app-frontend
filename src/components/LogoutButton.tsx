@@ -1,7 +1,7 @@
 function LogoutButton({ handleLogout }: { handleLogout: () => void }) {
   return (
     <div
-      className='flex h-13 w-full cursor-pointer items-center bg-wire-500 p-2'
+      className='after: flex h-13 w-full cursor-pointer items-center bg-wire-400 p-2'
       onClick={handleLogout}
     >
       <div className='w-full text-right'>

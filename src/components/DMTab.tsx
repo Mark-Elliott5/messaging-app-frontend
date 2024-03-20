@@ -11,7 +11,7 @@ function DMTab({
 }) {
   return (
     <div
-      className={`flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-wire-400 ${room === tab.room ? 'bg-wire-400' : 'bg-wire-300'}`}
+      className={`flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-wire-400 ${room === tab.room ? 'bg-wire-300' : 'bg-wire-500'} m-3 rounded-md`}
       onClick={() => {
         if (room === tab.room) return;
         handleDMClick(tab.room, tab.sender.username);

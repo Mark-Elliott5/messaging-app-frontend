@@ -9,7 +9,7 @@ function BuiltInRoom({
 }) {
   return (
     <div
-      className={`cursor-pointer hover:bg-wire-400 ${room === name ? 'bg-wire-400' : 'bg-wire-300'}`}
+      className={`cursor-pointer ${room === name ? 'bg-wire-300' : 'bg-wire-500 hover:bg-wire-400'} m-3 rounded-md`}
       onClick={() => {
         if (room === name) return;
         handleClick(name);

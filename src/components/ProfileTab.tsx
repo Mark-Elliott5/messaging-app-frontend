@@ -8,45 +8,42 @@ function ProfileTab() {
   const [user, setUser] = useState<IResponseUser | undefined>(undefined);
   const [editorVisible, setEditorVisible] = useState(false);
 
-  const { sendMessage } = useWebsocket(
-    `wss://${window.location.hostname}/chat`,
-    {
-      share: true, // Shares ws connection to same URL between components
-      onMessage: (e) => {
-        try {
-          const data: MessageResponse = JSON.parse(e.data);
-          if (data.type === 'profile') {
-            setEditorVisible(false);
-            setUser(data.profile);
-          }
-        } catch (err) {
-          console.log(err);
+  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+    share: true, // Shares ws connection to same URL between components
+    onMessage: (e) => {
+      try {
+        const data: MessageResponse = JSON.parse(e.data);
+        if (data.type === 'profile') {
+          setEditorVisible(false);
+          setUser(data.profile);
         }
-      },
-      retryOnError: true,
-      shouldReconnect: (e) => {
-        // code 1000 is 'Normal Closure'
-        if (e.code !== 1000) {
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    retryOnError: true,
+    shouldReconnect: (e) => {
+      // code 1000 is 'Normal Closure'
+      if (e.code !== 1000) {
+        return true;
+      }
+      return false;
+    },
+    reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
+    reconnectInterval: 3000,
+    filter: (e) => {
+      try {
+        const data: MessageResponse = JSON.parse(e.data);
+        if (data.type === 'profile') {
           return true;
         }
         return false;
-      },
-      reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
-      reconnectInterval: 3000,
-      filter: (e) => {
-        try {
-          const data: MessageResponse = JSON.parse(e.data);
-          if (data.type === 'profile') {
-            return true;
-          }
-          return false;
-        } catch (err) {
-          console.log(err);
-          return false;
-        }
-      },
-    }
-  );
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    },
+  });
 
   const handleSendMessage = (avatar: number, bio: string) => {
     if (avatar > 13) {
@@ -69,7 +66,7 @@ function ProfileTab() {
     <>
       <div
         id='profile-tab'
-        className='flex cursor-pointer items-center justify-between bg-wire-500 p-2'
+        className='flex cursor-pointer items-center justify-between bg-wire-400 p-2'
         onClick={() => setEditorVisible(!editorVisible)}
       >
         <div className=''>
