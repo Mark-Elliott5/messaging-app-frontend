@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Profile from './Profile';
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 function User({
   user,
@@ -14,13 +14,14 @@ function User({
 
   return (
     <>
-      <m.div
+      <motion.div
+        layout
         animate={{
-          transition: { duration: 0.2, type: 'tween' },
+          transition: { duration: 0.2, ease: 'easeIn' },
           opacity: 1,
         }}
-        exit={{ opacity: 0 }}
         initial={{ opacity: 0 }}
+        exit={{ opacity: 0 }}
         className={`m-3 cursor-pointer px-3 py-2 ${dropDownVisible ? 'bg-wire-300' : 'bg-wire-500 hover:bg-wire-400'} m-3 rounded-md`}
         onClick={() => setDropDownVisible(!dropDownVisible)}
       >
@@ -55,7 +56,7 @@ function User({
             </button>
           </>
         )}
-      </m.div>
+      </motion.div>
       {profileVisible && (
         <Profile
           key={user.username}

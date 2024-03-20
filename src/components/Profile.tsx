@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 function Profile({
   user,
@@ -12,7 +12,7 @@ function Profile({
       className='fixed left-0 top-0 z-20 h-dvh w-dvw'
       onClick={() => setProfileVisible(false)}
     >
-      <m.div
+      <motion.div
         animate={{
           transition: { duration: 0.2 },
           opacity: 1,
@@ -28,7 +28,7 @@ function Profile({
         </div>
         <h2 className='mb-2 text-wire-50'>About me</h2>
         <p>{user.bio}</p>
-      </m.div>
+      </motion.div>
     </div>
   );
 }

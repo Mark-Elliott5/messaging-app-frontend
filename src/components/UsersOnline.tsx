@@ -4,7 +4,7 @@ import User from './User';
 import { IResponseUser, MessageResponse } from '../types/wsMessageTypes';
 import { ICreateDMRoom, ILogout } from '../types/wsActionTypes';
 import LogoutButton from './LogoutButton';
-import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 
 function UsersOnline({
   setLoggedIn,
@@ -101,28 +101,51 @@ function UsersOnline({
   };
 
   return (
-    <div
-      id='users'
-      className='flex flex-col items-center justify-between bg-wire-600'
-    >
+    <div className='flex flex-col items-center justify-between bg-wire-600'>
       <div className='w-full'>
         <p className='bg-wire-400 py-2 pl-4 pr-2 font-bold'>Users Online</p>
         <AnimatePresence>
-          <LazyMotion features={domAnimation}>
+          <LayoutGroup key={'layoutUsersOnline'}>
             {users?.length ? (
               users
             ) : (
-              <p className='m-4 text-center italic'>Nobody is online!</p>
+              <motion.p
+                layout
+                animate={{
+                  transition: { duration: 0.2, ease: 'easeIn' },
+                }}
+                className='m-4 text-center italic'
+              >
+                Nobody is online!
+              </motion.p>
             )}
-            <p className='bg-wire-400 py-2 pl-4 pr-2 font-bold'>
+            <motion.p
+              layout
+              animate={{
+                transition: { duration: 0.2, ease: 'easeIn' },
+              }}
+              className='bg-wire-400 py-2 pl-4 pr-2 font-bold'
+            >
               Users in {room}
-            </p>
+            </motion.p>
+          </LayoutGroup>
+        </AnimatePresence>
+        <AnimatePresence>
+          <LayoutGroup key={'layoutRoomUsers'}>
             {roomers?.length ? (
               roomers
             ) : (
-              <p className='m-4 text-center italic'>Nobody is in this room!</p>
+              <motion.p
+                layout
+                animate={{
+                  transition: { duration: 0.2, ease: 'easeIn' },
+                }}
+                className='m-4 text-center italic'
+              >
+                Nobody is in this room!
+              </motion.p>
             )}
-          </LazyMotion>
+          </LayoutGroup>
         </AnimatePresence>
       </div>
       <LogoutButton handleLogout={handleLogout} />
