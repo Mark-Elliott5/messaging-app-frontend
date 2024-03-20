@@ -66,7 +66,7 @@ function ProfileTab() {
     <>
       <div
         id='profile-tab'
-        className='flex cursor-pointer items-center justify-between bg-wire-400 p-2'
+        className='shadow-wire flex cursor-pointer items-center justify-between rounded-md bg-wire-400 p-2'
         onClick={() => setEditorVisible(!editorVisible)}
       >
         <div className=''>

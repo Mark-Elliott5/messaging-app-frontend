@@ -9,7 +9,7 @@ import './app.css';
 import ProfileTab from './components/ProfileTab';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [room, setRoom] = useState<string>('General');
 
   useEffect(() => {
@@ -31,17 +31,14 @@ function App() {
   }, []);
 
   return loggedIn ? (
-    <div className='grid h-dvh w-dvw grid-cols-131 overflow-hidden font-inter'>
-      <div
-        id='rooms-and-profile'
-        className='flex flex-col justify-between bg-wire-600'
-      >
+    <div className='grid h-dvh w-dvw grid-cols-131 gap-4 overflow-hidden bg-wire-700 p-4 font-inter'>
+      <div id='rooms-and-profile' className='flex flex-col gap-4 rounded-md'>
         <Rooms room={room} setRoom={setRoom} />
         <ProfileTab />
       </div>
       <div
         id='middle-column'
-        className='z-10 flex flex-col bg-wire-500 shadow-x'
+        className='shadow-wire flex flex-col rounded-md bg-wire-500'
       >
         <MessageList room={room} />
         <TypingIndicator room={room} />

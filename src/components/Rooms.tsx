@@ -108,25 +108,33 @@ function Rooms({
   })();
 
   return (
-    <div className='bg-wire-600'>
-      <p className='bg-wire-400 py-2 pl-4 pr-2 font-bold'>Rooms</p>
-      {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
-        (name) => (
-          <BuiltInRoom
-            key={name}
-            name={name}
-            room={room}
-            handleClick={handleClick}
-          />
-        )
-      )}
-      <p className='bg-wire-400 py-2 pl-4 pr-2 font-bold'>Messages</p>
-      {tabs?.length ? (
-        tabs
-      ) : (
-        <p className='m-4 text-center italic'>No DMs yet!</p>
-      )}
-    </div>
+    <>
+      <div className='overflow-y-scoll shadow-wire rounded-md bg-wire-600'>
+        <p className='rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
+          Rooms
+        </p>
+        {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
+          (name) => (
+            <BuiltInRoom
+              key={name}
+              name={name}
+              room={room}
+              handleClick={handleClick}
+            />
+          )
+        )}
+      </div>
+      <div className='shadow-wire flex-1 overflow-y-scroll rounded-md bg-wire-600'>
+        <p className='rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
+          Messages
+        </p>
+        {tabs?.length ? (
+          tabs
+        ) : (
+          <p className='m-4 text-center italic'>No DMs yet!</p>
+        )}
+      </div>
+    </>
   );
 }
 

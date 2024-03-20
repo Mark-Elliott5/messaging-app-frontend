@@ -170,7 +170,7 @@ function MessageList({ room }: { room: string }) {
 
   return (
     <>
-      <div className='sticky top-0 flex w-full items-center gap-2 bg-wire-400 p-2'>
+      <div className='flex w-full items-center gap-2 overflow-hidden rounded-t-md bg-wire-400 p-2'>
         <span
           className={`h-3 w-3 ${connectionStatusClasses} rounded-full border-1`}
         />
@@ -178,7 +178,7 @@ function MessageList({ room }: { room: string }) {
       </div>
       <div
         id='messages'
-        className='relative flex h-dvh flex-[1_1_0] flex-col-reverse overflow-y-scroll'
+        className='flex h-dvh flex-[1_1_0] flex-col-reverse overflow-y-scroll'
       >
         {messages?.length ? (
           messages

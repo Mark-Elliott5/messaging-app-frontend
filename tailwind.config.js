@@ -14,6 +14,7 @@ export default {
       },
       boxShadow: {
         x: '0px 0px 16px 1px rgba(0,0,0,0.45)',
+        wire: '0 0 10px 0px #00000057',
       },
       width: {
         unset: 'unset',
@@ -21,6 +22,9 @@ export default {
       height: {
         unset: 'unset',
         13: '3.25rem',
+      },
+      maxHeight: {
+        'dvh-1/2': '50dvh',
       },
       colors: {
         'ebony-clay': {
