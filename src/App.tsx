@@ -31,10 +31,10 @@ function App() {
   }, []);
 
   return loggedIn ? (
-    <div className='grid h-dvh w-dvw grid-cols-2 grid-rows-2 gap-4 overflow-hidden bg-wire-700 p-4 font-inter md:grid-cols-131 md:grid-rows-none'>
+    <div className='grid w-dvw grid-cols-2 grid-rows-[minmax(100px,_500px)_minmax(0,_1fr)] gap-2 bg-wire-700 p-2 font-inter md:h-dvh md:grid-cols-131 md:grid-rows-none md:gap-4 md:overflow-hidden md:p-4'>
       <div
         id='rooms-and-profile'
-        className='col-span-1 col-start-1 row-start-2 flex flex-col gap-4 rounded-md md:col-start-1 md:row-start-1'
+        className='col-span-1 col-start-1 row-start-2 flex flex-col gap-2 rounded-md md:col-start-1 md:row-start-1 md:gap-4'
       >
         <Rooms room={room} setRoom={setRoom} />
         <ProfileTab />
@@ -47,7 +47,7 @@ function App() {
         <TypingIndicator room={room} />
         <MessageForm room={room} />
       </div>
-      <div className='col-span-1 col-start-2 row-start-2 flex flex-col items-center justify-between gap-4 overflow-y-scroll rounded-xl md:col-start-3 md:row-start-1'>
+      <div className='col-span-1 col-start-2 row-start-2 flex flex-col items-center justify-between gap-2 overflow-y-scroll rounded-md md:col-start-3 md:row-start-1 md:gap-4'>
         <UsersOnline setLoggedIn={setLoggedIn} room={room} />
       </div>
     </div>

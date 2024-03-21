@@ -16,7 +16,7 @@ function UsersOnline({
   const [usersOnline, setUsersOnline] = useState<IResponseUser[]>([]);
   const [roomUsers, setRoomUsers] = useState<IResponseUser[]>([]);
 
-  const { sendMessage } = useWebsocket(`wss://${window.location.host}/chat`, {
+  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('usersOnline websocket message recieved');
@@ -77,23 +77,19 @@ function UsersOnline({
   };
 
   const users = (() => {
-    return usersOnline.length ? (
-      <AnimatePresence mode='popLayout'>
-        {Array.from(usersOnline).map((user) => (
+    return usersOnline.length
+      ? Array.from(usersOnline).map((user) => (
           <User key={user.username} user={user} handleClick={handleDMClick} />
-        ))}
-      </AnimatePresence>
-    ) : null;
+        ))
+      : null;
   })();
 
   const roomers = (() => {
-    return roomUsers.length ? (
-      <AnimatePresence mode='popLayout'>
-        {Array.from(roomUsers).map((user) => (
+    return roomUsers.length
+      ? Array.from(roomUsers).map((user) => (
           <User key={user.username} user={user} handleClick={handleDMClick} />
-        ))}
-      </AnimatePresence>
-    ) : null;
+        ))
+      : null;
   })();
 
   const handleLogout = () => {
@@ -106,14 +102,14 @@ function UsersOnline({
 
   return (
     <>
-      <div className='flex h-full w-full flex-col gap-4'>
+      <div className='flex h-full w-full flex-col gap-2 md:gap-4'>
         <LayoutGroup key={'layoutRightColumn'}>
           <motion.div
             layout
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
+            className='min-h-dvh-1/2 max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutUsersOnline'}>
               <motion.p
@@ -126,20 +122,22 @@ function UsersOnline({
               >
                 Users Online
               </motion.p>
-              {users ? (
-                users
-              ) : (
-                <motion.p
-                  key={'nobodyOnline'}
-                  layout
-                  animate={{
-                    transition: { duration: 0.2, ease: 'easeIn' },
-                  }}
-                  className='m-4 text-center italic'
-                >
-                  Nobody is online!
-                </motion.p>
-              )}
+              <AnimatePresence mode='popLayout'>
+                {users ? (
+                  users
+                ) : (
+                  <motion.p
+                    key={'nobodyOnline'}
+                    layout
+                    animate={{
+                      transition: { duration: 0.2, ease: 'easeIn' },
+                    }}
+                    className='m-4 text-center italic'
+                  >
+                    Nobody is online!
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </LayoutGroup>
           </motion.div>
           <motion.div
@@ -147,7 +145,7 @@ function UsersOnline({
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
+            className='min-h-dvh-1/2 max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutRoomUsers'}>
               <motion.p
@@ -160,20 +158,22 @@ function UsersOnline({
               >
                 Users in {room}
               </motion.p>
-              {roomers ? (
-                roomers
-              ) : (
-                <motion.p
-                  key={'emptyRoom'}
-                  layout
-                  animate={{
-                    transition: { duration: 0.2, ease: 'easeIn' },
-                  }}
-                  className='m-4 text-center italic'
-                >
-                  Nobody is in this room!
-                </motion.p>
-              )}
+              <AnimatePresence mode='popLayout'>
+                {roomers ? (
+                  roomers
+                ) : (
+                  <motion.p
+                    key={'emptyRoom'}
+                    layout
+                    animate={{
+                      transition: { duration: 0.2, ease: 'easeIn' },
+                    }}
+                    className='m-4 text-center italic'
+                  >
+                    Nobody is in this room!
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </LayoutGroup>
           </motion.div>
         </LayoutGroup>

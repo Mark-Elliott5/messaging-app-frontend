@@ -19,7 +19,7 @@ function Rooms({
     Map<string, IDMTabMessage & { newMessage: boolean }>
   >(new Map());
 
-  const { sendMessage } = useWebsocket(`wss://${window.location.host}/chat`, {
+  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('room websocket message recieved');
@@ -113,7 +113,7 @@ function Rooms({
   return (
     <>
       <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'>
-        <p className='rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
+        <p className='sticky top-0 rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
           Rooms
         </p>
         {['General', 'Gaming', 'Music', 'Sports', 'Computer Science'].map(
@@ -127,8 +127,8 @@ function Rooms({
           )
         )}
       </div>
-      <div className='overflow-y-scrollrounded-md max-h-dvh-1/2 flex-1 bg-wire-600 shadow-wire'>
-        <p className='rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
+      <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'>
+        <p className='sticky top-0 rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
           Messages
         </p>
         {tabs ? tabs : <p className='m-4 text-center italic'>No DMs yet!</p>}

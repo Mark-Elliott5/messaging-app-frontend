@@ -11,7 +11,7 @@ function AnimatedEllipses() {
           transition: { duration: 0.8, delay: 0, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
-        className='text-2xs'
+        className='text-xs'
       >
         .
       </m.span>
@@ -21,7 +21,7 @@ function AnimatedEllipses() {
           transition: { duration: 0.8, delay: 0.2, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
-        className='text-2xs'
+        className='text-xs'
       >
         .
       </m.span>
@@ -31,7 +31,7 @@ function AnimatedEllipses() {
           transition: { duration: 0.8, delay: 0.4, repeat: Infinity },
         }}
         style={{ display: 'inline-block' }}
-        className='text-2xs'
+        className='text-xs'
       >
         .
       </m.span>

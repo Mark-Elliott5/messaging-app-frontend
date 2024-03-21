@@ -1,11 +1,10 @@
 function LogoutButton({ handleLogout }: { handleLogout: () => void }) {
   return (
     <div
-      className='shadow-wire flex h-13 w-full cursor-pointer items-center rounded-md bg-wire-400 p-2'
+      className='flex w-full cursor-pointer items-center rounded-md bg-wire-400 p-2 shadow-wire'
       onClick={handleLogout}
     >
-      <div className='w-full text-right'>
-        <span className=''>Logout</span>
+      <div className='flex h-9 w-full flex-row-reverse items-center text-right'>
         <svg
           className='ml-2 inline-block'
           xmlns='http://www.w3.org/2000/svg'
@@ -17,6 +16,7 @@ function LogoutButton({ handleLogout }: { handleLogout: () => void }) {
           <path d='M0 0h24v24H0z' fill='none' />
           <path d='M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z' />
         </svg>
+        <span className=''>Logout</span>
       </div>
     </div>
   );

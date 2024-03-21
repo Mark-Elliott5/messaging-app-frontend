@@ -6,7 +6,7 @@ import { MessageResponse } from '../types/wsMessageTypes';
 
 function TypingIndicator({ room }: { room: string }) {
   const [typers, setTypers] = useState<Set<string>>(new Set());
-  const { readyState } = useWebsocket(`wss://${window.location.host}/chat`, {
+  const { readyState } = useWebsocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -64,7 +64,7 @@ function TypingIndicator({ room }: { room: string }) {
   useEffect(() => setTypers(new Set()), [room]);
 
   return (
-    <div className='h-5'>
+    <div className='h-4 md:h-5'>
       <AnimatePresence>
         {usersTyping && (
           <LazyMotion features={domAnimation}>
@@ -76,9 +76,9 @@ function TypingIndicator({ room }: { room: string }) {
               }}
               exit={{ y: 6, opacity: 0 }}
               style={{ display: 'inline-block', y: 6, opacity: 0 }}
-              className='ml-1'
+              className='ml-1 h-4 md:h-5'
             >
-              <span className='pl-2 text-2xs'>{usersTyping}</span>
+              <span className='pl-2 text-2xs md:text-xs'>{usersTyping}</span>
               <AnimatedEllipses />
             </m.div>
           </LazyMotion>

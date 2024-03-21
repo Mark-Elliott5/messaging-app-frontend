@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { IResponseUser } from '../types/wsMessageTypes';
 import TextareaAutosize from 'react-textarea-autosize';
+import { motion } from 'framer-motion';
 
 function ProfileEditor({
   user,
   handleSendMessage,
   setEditorVisible,
 }: {
-  user: IResponseUser | undefined;
+  user: IResponseUser;
   handleSendMessage: (avatar: number, bio: string) => void;
   setEditorVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -18,17 +19,23 @@ function ProfileEditor({
       className='fixed left-0 top-0 z-20 h-dvh w-dvw'
       onClick={() => setEditorVisible(false)}
     >
-      <div
-        className='fixed left-1/2 top-1/2 flex h-2/3 w-2/3 -translate-x-1/2 -translate-y-1/2 transform flex-col gap-4 overflow-y-scroll rounded-md bg-wire-600 p-4 shadow-lg'
+      <motion.div
+        animate={{
+          transition: { duration: 0.2 },
+          opacity: 1,
+        }}
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        className='fixed left-1/2 top-1/2 h-2/3 w-3/4 -translate-x-1/2 -translate-y-1/2 transform overflow-y-scroll rounded-md bg-wire-700 p-6 shadow-wire md:w-2/3'
         onClick={(e) => e.stopPropagation()}
       >
-        <span className='text-2xl'>Profile Editor</span>
-        <div>
+        <span className='mb-2 text-2xl'>Profile Editor</span>
+        <div className='mb-4 flex items-center gap-4'>
           <img
-            className='mr-4 inline-block cursor-pointer'
-            src={`${user && user.avatar}.png`}
+            className='inline-block h-13 md:h-unset'
+            src={`${user.avatar}.png`}
           />
-          <span className='text-xl'>{user && user.username}</span>
+          <span className='text-xl md:text-3xl'>{user.username}</span>
         </div>
         <div>
           <p>Select an avatar</p>
@@ -36,7 +43,7 @@ function ProfileEditor({
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((num) => (
               <img
                 src={`${num}.png`}
-                className={`p-2 ${user && user.avatar === num ? 'border-1 border-wire-300' : avatarField === num ? 'border-1 border-green-500' : ''} hover:bg-wire-300`}
+                className={`p-2 ${user.avatar === num ? 'border-1 border-wire-300' : avatarField === num ? 'border-1 border-green-500' : ''} hover:bg-wire-300`}
                 onClick={() => setAvatarField(num)}
               />
             ))}
@@ -57,13 +64,13 @@ function ProfileEditor({
             {user?.bio}
           </TextareaAutosize>
           <button
-            className='w-full rounded-sm bg-wire-300 p-2'
+            className='w-full rounded-md bg-wire-300 p-2'
             onClick={() => handleSendMessage(avatarField, bioField)}
           >
             Update Profile
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

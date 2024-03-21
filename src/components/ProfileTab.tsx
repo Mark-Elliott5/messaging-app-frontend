@@ -3,12 +3,17 @@ import { IResponseUser, MessageResponse } from '../types/wsMessageTypes';
 import { useState } from 'react';
 import { IUpdateProfile } from '../types/wsActionTypes';
 import ProfileEditor from './ProfileEditor';
+import { AnimatePresence } from 'framer-motion';
 
 function ProfileTab() {
-  const [user, setUser] = useState<IResponseUser | undefined>(undefined);
+  const [user, setUser] = useState<IResponseUser>({
+    username: 'Loading...',
+    avatar: 0,
+    bio: 'Loading...',
+  });
   const [editorVisible, setEditorVisible] = useState(false);
 
-  const { sendMessage } = useWebsocket(`wss://${window.location.host}/chat`, {
+  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -91,13 +96,15 @@ function ProfileTab() {
           </g>
         </svg>
       </div>
-      {editorVisible && (
-        <ProfileEditor
-          user={user}
-          handleSendMessage={handleSendMessage}
-          setEditorVisible={setEditorVisible}
-        />
-      )}
+      <AnimatePresence>
+        {editorVisible && (
+          <ProfileEditor
+            user={user}
+            handleSendMessage={handleSendMessage}
+            setEditorVisible={setEditorVisible}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

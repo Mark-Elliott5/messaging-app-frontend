@@ -13,7 +13,8 @@ export default {
         1: '1px',
       },
       fontSize: {
-        '2xs': ['12px', '16px'],
+        '2xs': ['10px', '12px'],
+        '3xs': ['8px', '8px'],
       },
       boxShadow: {
         x: '0px 0px 16px 1px rgba(0,0,0,0.45)',
@@ -27,6 +28,9 @@ export default {
         13: '3.25rem',
       },
       maxHeight: {
+        'dvh-1/2': '50dvh',
+      },
+      minHeight: {
         'dvh-1/2': '50dvh',
       },
       colors: {

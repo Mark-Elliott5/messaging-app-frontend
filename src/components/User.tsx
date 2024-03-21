@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Profile from './Profile';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function User({
   user,
@@ -33,38 +33,47 @@ function User({
           ></img>
           <span className=''>{user.username}</span>
         </div>
-        {dropDownVisible && (
-          <>
-            <button
-              type='button'
-              className='mt-2 block w-full rounded-md p-2 text-left hover:bg-wire-200'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClick(user.username);
+        <AnimatePresence mode='sync'>
+          {dropDownVisible && (
+            <motion.div
+              layout
+              animate={{
+                transition: { duration: 0.3, ease: 'easeInOut' },
+                opacity: 1,
+                y: 0,
               }}
+              initial={{ opacity: 0, y: -16 }}
+              exit={{ opacity: 0 }}
             >
-              Send DM
-            </button>
-            <button
-              type='button'
-              className='block w-full rounded-md p-2 text-left hover:bg-wire-200'
-              onClick={(e) => {
-                e.stopPropagation();
-                setProfileVisible(true);
-              }}
-            >
-              View Profile
-            </button>
-          </>
-        )}
+              <button
+                type='button'
+                className='mt-2 block w-full rounded-md p-2 text-left hover:bg-wire-200'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClick(user.username);
+                }}
+              >
+                Send DM
+              </button>
+              <button
+                type='button'
+                className='block w-full rounded-md p-2 text-left hover:bg-wire-200'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProfileVisible(true);
+                }}
+              >
+                View Profile
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
-      {profileVisible && (
-        <Profile
-          key={user.username}
-          user={user}
-          setProfileVisible={setProfileVisible}
-        />
-      )}
+      <AnimatePresence>
+        {profileVisible && (
+          <Profile user={user} setProfileVisible={setProfileVisible} />
+        )}
+      </AnimatePresence>
     </>
   );
 }

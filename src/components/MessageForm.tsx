@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 function MessageForm({ room }: { room: string }) {
   // needs app state room variable to placeholder "Message {room}"
   const { sendMessage, readyState } = useWebsocket(
-    `wss://${window.location.host}/chat`,
+    `ws://${window.location.host}/chat`,
     {
       share: true, // Shares ws connection to same URL between components
       onClose: (e) => console.log('MessageForm websocket closed: ' + e.reason),
