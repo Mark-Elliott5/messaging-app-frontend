@@ -6,7 +6,7 @@ import { MessageResponse } from '../types/wsMessageTypes';
 
 function TypingIndicator({ room }: { room: string }) {
   const [typers, setTypers] = useState<Set<string>>(new Set());
-  const { readyState } = useWebSocket(`ws://${window.location.host}/chat`, {
+  const { readyState } = useWebSocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {

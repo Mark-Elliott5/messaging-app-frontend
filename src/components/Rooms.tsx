@@ -19,7 +19,7 @@ function Rooms({
     Map<string, IDMTabMessage & { newMessage: boolean }>
   >(new Map());
 
-  const { sendMessage } = useWebSocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebSocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('room websocket message recieved');

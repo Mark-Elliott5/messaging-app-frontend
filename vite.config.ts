@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     emptyOutDir: true,
-    outDir: './build',
-    sourcemap: true,
-    minify: false,
+    outDir: '../dist/build',
+    sourcemap: false,
+    minify: true,
   },
 });

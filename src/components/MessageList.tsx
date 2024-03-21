@@ -11,7 +11,7 @@ import { LayoutGroup } from 'framer-motion';
 function MessageList({ room }: { room: string }) {
   const [messageHistory, setMessageHistory] = useState<IStoredMessage[]>([]);
 
-  const { readyState } = useWebSocket(`ws://${window.location.host}/chat`, {
+  const { readyState } = useWebSocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {

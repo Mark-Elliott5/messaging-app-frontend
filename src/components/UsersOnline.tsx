@@ -16,7 +16,7 @@ function UsersOnline({
   const [usersOnline, setUsersOnline] = useState<IResponseUser[]>([]);
   const [roomUsers, setRoomUsers] = useState<IResponseUser[]>([]);
 
-  const { sendMessage } = useWebSocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebSocket(`wss://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('usersOnline websocket message recieved');
