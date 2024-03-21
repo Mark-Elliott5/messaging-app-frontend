@@ -7,6 +7,7 @@ import TypingIndicator from './components/TypingIndicator';
 import MessageForm from './components/MessageForm';
 import './app.css';
 import ProfileTab from './components/ProfileTab';
+import ServerMessage from './components/ServerMessage';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,7 +42,7 @@ function App() {
       </div>
       <div
         id='middle-column'
-        className='col-span-2 row-start-1 flex flex-col rounded-md bg-wire-500 shadow-wire md:col-span-1 md:col-start-2'
+        className='col-span-2 row-start-1 flex flex-col rounded-md border-1 border-wire-200 bg-wire-500 shadow-wire md:col-span-1 md:col-start-2'
       >
         <MessageList room={room} />
         <TypingIndicator room={room} />
@@ -50,6 +51,7 @@ function App() {
       <div className='col-span-1 col-start-2 row-start-2 flex flex-col items-center justify-between gap-2 overflow-y-scroll rounded-md md:col-start-3 md:row-start-1 md:gap-4'>
         <UsersOnline setLoggedIn={setLoggedIn} room={room} />
       </div>
+      <ServerMessage />
     </div>
   ) : (
     <LoginPage setLoggedIn={setLoggedIn} />

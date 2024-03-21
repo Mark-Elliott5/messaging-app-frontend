@@ -1,4 +1,4 @@
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import {
   IResponseUser,
   IStoredMessage,
@@ -11,7 +11,7 @@ import { LayoutGroup } from 'framer-motion';
 function MessageList({ room }: { room: string }) {
   const [messageHistory, setMessageHistory] = useState<IStoredMessage[]>([]);
 
-  const { readyState } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { readyState } = useWebSocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -113,7 +113,7 @@ function MessageList({ room }: { room: string }) {
     reconnectAttempts: 3, // Applies to retryOnError as well as reconnectInterval
     reconnectInterval: 3000,
     // Every time readyState or lastMessage changes, the component rerenders, even
-    // if it is not destructured from useWebsocket or used in the function body.
+    // if it is not destructured from useWebSocket or used in the function body.
     // when filter returns false, lastMessage will not be updated. The 'on" options
     // (onMessage, etc), will still receive filtered messages though, which we
     // can then use to update our own state or reference. so filter stops unnecessary

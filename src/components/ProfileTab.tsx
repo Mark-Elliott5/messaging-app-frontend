@@ -1,4 +1,4 @@
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { IResponseUser, MessageResponse } from '../types/wsMessageTypes';
 import { useState } from 'react';
 import { IUpdateProfile } from '../types/wsActionTypes';
@@ -13,7 +13,7 @@ function ProfileTab() {
   });
   const [editorVisible, setEditorVisible] = useState(false);
 
-  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebSocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {
@@ -71,7 +71,7 @@ function ProfileTab() {
     <>
       <div
         id='profile-tab'
-        className='flex cursor-pointer items-center justify-between rounded-md bg-wire-400 p-2 shadow-wire'
+        className='flex cursor-pointer items-center justify-between rounded-md border-1 border-wire-300 bg-wire-400 p-2 shadow-wire'
         onClick={() => setEditorVisible(!editorVisible)}
       >
         <div className=''>

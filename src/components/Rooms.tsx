@@ -1,4 +1,4 @@
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { useState } from 'react';
 import { IDMTabMessage, MessageResponse } from '../types/wsMessageTypes';
 import { IJoinDMRoom, IJoinRoom } from '../types/wsActionTypes';
@@ -19,7 +19,7 @@ function Rooms({
     Map<string, IDMTabMessage & { newMessage: boolean }>
   >(new Map());
 
-  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebSocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('room websocket message recieved');
@@ -112,7 +112,7 @@ function Rooms({
 
   return (
     <>
-      <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'>
+      <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md border-1 border-wire-300 bg-wire-600 shadow-wire'>
         <p className='sticky top-0 rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
           Rooms
         </p>
@@ -127,7 +127,7 @@ function Rooms({
           )
         )}
       </div>
-      <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'>
+      <div className='max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md border-1 border-wire-300 bg-wire-600 shadow-wire'>
         <p className='sticky top-0 rounded-t-md bg-wire-400 py-2 pl-4 pr-2 font-bold'>
           Messages
         </p>

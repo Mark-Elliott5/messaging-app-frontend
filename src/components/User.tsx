@@ -26,23 +26,23 @@ function User({
         className={`m-3 cursor-pointer px-3 py-2 ${dropDownVisible ? 'bg-wire-300' : 'bg-wire-500 hover:bg-wire-400'} m-3 rounded-md`}
         onClick={() => setDropDownVisible(!dropDownVisible)}
       >
-        <div className='flex items-center gap-3'>
+        <motion.div layout className='flex items-center gap-3'>
           <img
             className='inline-block h-9 flex-[0_1_0%]'
             src={`${user.avatar}.png`}
           ></img>
           <span className=''>{user.username}</span>
-        </div>
+        </motion.div>
         <AnimatePresence mode='sync'>
           {dropDownVisible && (
             <motion.div
               layout
               animate={{
-                transition: { duration: 0.3, ease: 'easeInOut' },
+                transition: { duration: 0.4, ease: 'easeInOut' },
                 opacity: 1,
                 y: 0,
               }}
-              initial={{ opacity: 0, y: -16 }}
+              initial={{ opacity: 0, y: -20 }}
               exit={{ opacity: 0 }}
             >
               <button

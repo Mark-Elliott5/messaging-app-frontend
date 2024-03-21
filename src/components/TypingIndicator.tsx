@@ -1,12 +1,12 @@
 import AnimatedEllipses from './AnimatedEllipses';
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { MessageResponse } from '../types/wsMessageTypes';
 
 function TypingIndicator({ room }: { room: string }) {
   const [typers, setTypers] = useState<Set<string>>(new Set());
-  const { readyState } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { readyState } = useWebSocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       try {

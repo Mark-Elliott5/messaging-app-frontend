@@ -1,4 +1,4 @@
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { useState } from 'react';
 import User from './User';
 import { IResponseUser, MessageResponse } from '../types/wsMessageTypes';
@@ -16,7 +16,7 @@ function UsersOnline({
   const [usersOnline, setUsersOnline] = useState<IResponseUser[]>([]);
   const [roomUsers, setRoomUsers] = useState<IResponseUser[]>([]);
 
-  const { sendMessage } = useWebsocket(`ws://${window.location.host}/chat`, {
+  const { sendMessage } = useWebSocket(`ws://${window.location.host}/chat`, {
     share: true, // Shares ws connection to same URL between components
     onMessage: (e) => {
       // console.log('usersOnline websocket message recieved');
@@ -109,7 +109,7 @@ function UsersOnline({
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='min-h-dvh-1/2 max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
+            className='max-h-dvh-1/2 min-h-12 flex-1 overflow-y-scroll rounded-md border-1 border-wire-300 bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutUsersOnline'}>
               <motion.p
@@ -145,7 +145,7 @@ function UsersOnline({
             animate={{
               transition: { duration: 0.2, ease: 'easeIn' },
             }}
-            className='min-h-dvh-1/2 max-h-dvh-1/2 flex-1 overflow-y-scroll rounded-md bg-wire-600 shadow-wire'
+            className='max-h-dvh-1/2 min-h-12 flex-1 overflow-y-scroll rounded-md border-1 border-wire-300 bg-wire-600 shadow-wire'
           >
             <LayoutGroup key={'layoutRoomUsers'}>
               <motion.p

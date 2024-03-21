@@ -1,12 +1,12 @@
 import { ISendMessage, ITypingIndication } from '../types/wsActionTypes';
 // import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import useWebsocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useEffect, useRef } from 'react';
 
 function MessageForm({ room }: { room: string }) {
   // needs app state room variable to placeholder "Message {room}"
-  const { sendMessage, readyState } = useWebsocket(
+  const { sendMessage, readyState } = useWebSocket(
     `ws://${window.location.host}/chat`,
     {
       share: true, // Shares ws connection to same URL between components
@@ -83,7 +83,11 @@ function MessageForm({ room }: { room: string }) {
           placeholder={`Message ${room}`}
           onChange={handleTyping}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && e.shiftKey === false) {
+            if (
+              e.key === 'Enter' &&
+              e.shiftKey === false &&
+              e.currentTarget.value.length <= 900
+            ) {
               e.preventDefault();
               handleSendMessage(e);
             }
