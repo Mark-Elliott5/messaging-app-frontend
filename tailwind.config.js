@@ -6,7 +6,7 @@ export default {
       gridTemplateColumns: {
         131: '1fr 3fr 1fr',
       },
-      gridAutoRowss: {
+      gridAutoRows: {
         0: 'revert',
       },
       borderWidth: {

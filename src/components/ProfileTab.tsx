@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IUpdateProfile } from '../types/wsActionTypes';
 import ProfileEditor from './ProfileEditor';
 import { AnimatePresence } from 'framer-motion';
+import TabInfo from './TabInfo';
 
 function ProfileTab() {
   const [user, setUser] = useState<IResponseUser>({
@@ -74,12 +75,8 @@ function ProfileTab() {
         className='flex cursor-pointer items-center justify-between rounded-md border-1 border-wire-300 bg-wire-400 p-2 shadow-wire'
         onClick={() => setEditorVisible(!editorVisible)}
       >
-        <div className=''>
-          <img
-            className='mr-2 inline-block h-9 flex-[0_1_0%]'
-            src={`${user && user.avatar}.png`}
-          ></img>
-          <span className=''>{user && user.username}</span>
+        <div className='flex items-center gap-3'>
+          <TabInfo username={user.username} avatar={user.avatar} />
         </div>
 
         <svg
