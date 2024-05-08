@@ -31,7 +31,7 @@ function DMTab({
         <TabInfo username={tab.sender.username} avatar={tab.sender.avatar} />
       </div>
       <span
-        className={`en h-3 w-3 ${tab.newMessage && room !== tab.room && 'border-1 border-green-500 bg-green-400'} rounded-full`}
+        className={`en min-h-3 min-w-3 ${tab.newMessage && room !== tab.room && 'border-1 border-green-500 bg-green-400'} rounded-full`}
       />
     </motion.div>
   );
