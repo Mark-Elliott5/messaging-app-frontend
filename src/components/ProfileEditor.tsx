@@ -26,18 +26,18 @@ function ProfileEditor({
         }}
         exit={{ opacity: 0 }}
         initial={{ opacity: 0 }}
-        className='fixed left-1/2 top-1/2 h-2/3 w-3/4 -translate-x-1/2 -translate-y-1/2 transform overflow-y-scroll rounded-md border-1 border-wire-500 bg-wire-700 p-6 shadow-wire md:w-2/3'
+        className='fixed left-1/2 top-1/2 flex h-2/3 w-3/4 -translate-x-1/2 -translate-y-1/2 transform flex-col justify-between overflow-y-scroll rounded-md border-1 border-wire-500 bg-wire-700 p-6 shadow-wire md:w-2/3'
         onClick={(e) => e.stopPropagation()}
       >
-        <span className='mb-2 text-2xl'>Profile Editor</span>
-        <div className='mb-4 flex items-center gap-4'>
-          <img
-            className='inline-block h-13 md:h-unset'
-            src={`${user.avatar}.png`}
-          />
-          <span className='text-xl md:text-3xl'>{user.username}</span>
-        </div>
         <div>
+          <span className='mb-2 text-2xl'>Profile Editor</span>
+          <div className='mb-4 flex items-center gap-4'>
+            <img
+              className='inline-block h-13 md:h-unset'
+              src={`${user.avatar}.png`}
+            />
+            <span className='text-xl md:text-3xl'>{user.username}</span>
+          </div>
           <p>Select an avatar</p>
           <div className='grid grid-cols-4 gap-2'>
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((num) => (
@@ -48,6 +48,8 @@ function ProfileEditor({
               />
             ))}
           </div>
+        </div>
+        <div className='flex flex-grow flex-col gap-2'>
           <p>Bio</p>
           <TextareaAutosize
             maxLength={900}
